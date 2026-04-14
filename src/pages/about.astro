@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro'
+---
+
+<Base title="About" description="I have always been captivated by how things work — the kind of thinking that follows questions past the boundaries of any single discipline, arriving sometimes in territory with no map or formal training.">
+
+  <article class="about">
+
+    <header class="about-header">
+      <span class="about-label">About</span>
+      <h1 class="about-title">Jorge Gonzalez</h1>
+      <p class="about-subtitle">Web Designer & Programmer — Costa Rica</p>
+    </header>
+
+    <div class="about-body">
+
+      <p class="about-lead">
+        I have always been captivated by how things work — the kind of thinking
+        that follows questions past the boundaries of any single discipline,
+        arriving sometimes in territory with no map or formal training.
+      </p>
+
+      <p>
+        Something I have discovered over the years is that there is a faster,
+        more associative layer of thinking beneath the conscious one — it
+        processes in parallel and surfaces connections before language catches
+        up. Learning to give it room, to slow down enough to listen to it,
+        turns it from a vague feeling into something closer to a working
+        instrument. Along the same lines, a lifelong obsession with design —
+        not as aesthetics but as the study of why things are structured the way
+        they are — has turned out to be unexpectedly transferable. An eye
+        trained to find patterns and structural flaws in one domain starts
+        finding them everywhere else too. The domains change. The question
+        stays the same.
+      </p>
+
+      <p>
+        I am a web designer and programmer based in Costa Rica. I build tools,
+        think about systems, and occasionally write long essays about
+        foundational assumptions that turn out to be shakier than advertised.
+        My background is in graphic design. The gap between design and
+        programming turns out to be one of the more productive places to stand.
+      </p>
+
+      <p>
+        These are my own explanations for how I think. I hold them loosely —
+        we are all prone to constructing flattering narratives about ourselves,
+        and I am not exempt. But for what it is worth, this is where the work
+        on this site comes from. Not from a curriculum, but from following
+        discomfort until it becomes a pattern, and following the pattern until
+        it becomes a question worth writing down.
+      </p>
+
+      <p>
+        I am currently building a text macro browser extension, thinking
+        through a compositional framework for web layouts, and somewhere in the
+        background, working out what geometry looks like when you replace
+        infinite smooth objects with directed steps and rules. The ideas do not
+        always know which category they belong to. That is usually a good sign.
+      </p>
+
+    </div>
+
+  </article>
+
+</Base>
+
+<style>
+  .about {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 8rem 1.5rem 6rem;
+  }
+
+  .about-header {
+    margin-bottom: 3.5rem;
+    border-bottom: 1px solid var(--border-soft);
+    padding-bottom: 2rem;
+  }
+
+  .about-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .about-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .about-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .about-body p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 1.6rem;
+  }
+
+  .about-lead {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem) !important;
+    font-style: italic;
+    color: var(--text-muted) !important;
+    border-left: 2px solid var(--accent);
+    padding-left: 1.25rem;
+    margin-bottom: 2.5rem !important;
+  }
+</style>
