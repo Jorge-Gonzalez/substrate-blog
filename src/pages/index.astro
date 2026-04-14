@@ -1,0 +1,501 @@
+---
+import Base from '../layouts/Base.astro'
+import { getCollection } from 'astro:content'
+import { formatDate } from '../utils/formatDate'
+
+const posts = await getCollection('posts')
+const sorted = posts.sort((a, b) => {
+  if (a.data.seriesPart && b.data.seriesPart) {
+    return a.data.seriesPart - b.data.seriesPart
+  }
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+})
+const featured = sorted[0]
+const rest = sorted.slice(1)
+---
+
+<Base title="Jorge Gonzalez">
+
+  <section class="hero" id="home">
+    <div class="hero-eyebrow">
+      <span class="label">Web Designer &amp; Programmer</span>
+    </div>
+    <h1 class="hero-name">
+      Jorge
+      <span>Gonzalez</span>
+    </h1>
+    <p class="hero-title">Web Designer &amp; Programmer &mdash; Costa Rica</p>
+    <p class="hero-statement">
+      I think in systems. Design taught me to see structure. Code taught me
+      to question it. Now I build things at the intersection of both — and
+      write about what I find along the way.
+    </p>
+    <span class="hero-scroll">Scroll</span>
+  </section>
+
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-number">01</span>
+      <h2>The Way I Think</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-bio reveal">
+        <p>I started in graphic design, moved into web development, and
+        somewhere along the way realized the most interesting problems live
+        at the border between disciplines. The same instinct that makes a
+        layout feel right tells you when a line of code is doing too much.</p>
+        <p>I am largely self-taught, which means I never learned to stop
+        asking why. Most conventions in design, in code, and even in
+        mathematics turn out to be choices that hardened into rules over
+        time — and choices can always be revisited. That skepticism is not
+        contrarianism. It is how I find better solutions.</p>
+        <p>This site is where I share what I am thinking about: tools I am
+        building, ideas I cannot stop turning over, and the occasional long
+        essay about something that should not work the way everyone assumes
+        it does.</p>
+      </div>
+      <div class="about-values reveal">
+        <div class="value-item">
+          <p class="value-label">Design Thinking</p>
+          <p>Every problem has a shape. Finding it before writing a single
+          line saves more time than any optimization afterward.</p>
+        </div>
+        <div class="value-item">
+          <p class="value-label">Radical Simplicity</p>
+          <p>The best solution is the one that does exactly one thing and
+          does it so well you never have to think about it again.</p>
+        </div>
+        <div class="value-item">
+          <p class="value-label">Independent Inquiry</p>
+          <p>The most useful ideas tend to arrive from outside the field
+          they end up changing. I take that seriously.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ideas">
+    <div class="section-header reveal">
+      <span class="section-number">02</span>
+      <h2>Ideas Worth Sharing</h2>
+    </div>
+    <div class="ideas-grid">
+
+      {featured && (
+        <a class="idea-card featured reveal" href={`/posts/${featured.id}`}>
+          <div class="idea-meta">
+            <p class="featured-label">
+              {featured.data.series
+                ? `${featured.data.series} · Part ${featured.data.seriesPart}`
+                : 'Featured'}
+            </p>
+            <h3 class="idea-title">{featured.data.title}</h3>
+            <div class="idea-footer">
+              <span class="idea-date">{formatDate(featured.data.date)}</span>
+              <span class="idea-arrow">→</span>
+            </div>
+          </div>
+          <div class="idea-content">
+            <p class="featured-abstract">{featured.data.description}</p>
+          </div>
+        </a>
+      )}
+
+      {rest.map(post => (
+        <a class="idea-card reveal" href={`/posts/${post.id}`}>
+          <p class="idea-tag">{post.data.topic}</p>
+          <h3 class="idea-title">{post.data.title}</h3>
+          <p class="idea-excerpt">{post.data.description}</p>
+          <div class="idea-footer">
+            <span class="idea-date">{formatDate(post.data.date)}</span>
+            <span class="idea-arrow">→</span>
+          </div>
+        </a>
+      ))}
+
+    </div>
+  </section>
+
+  <section id="connect">
+    <div class="section-header reveal">
+      <span class="section-number">03</span>
+      <h2>Let's Think Together</h2>
+    </div>
+    <div class="connect-inner">
+      <div class="connect-text reveal">
+        <p>I am interested in conversations that cross boundaries — between
+        design and code, between intuition and rigour, between the way things
+        are built and the way they could be built instead. If something I have
+        written made you think differently about a problem you are working on,
+        I would like to hear about it.</p>
+        <p>Currently building a text macro browser extension and thinking
+        through a compositional framework for web layouts. Always turning over
+        ideas at the foundations of mathematics, computation, and design.
+        Based in Costa Rica, available for projects that value thinking as
+        much as execution.</p>
+      </div>
+      <div class="connect-links reveal">
+        <a class="connect-link" href="mailto:jorge.gonzalez@live.com">
+          <div class="connect-link-label">
+            <span class="connect-link-type">Email</span>
+            <span class="connect-link-value">jorge.gonzalez@live.com</span>
+          </div>
+          <span class="connect-link-arrow">→</span>
+        </a>
+        <a class="connect-link" href="https://github.com/Jorge-Gonzalez" target="_blank" rel="noopener">
+          <div class="connect-link-label">
+            <span class="connect-link-type">GitHub</span>
+            <span class="connect-link-value">github.com/Jorge-Gonzalez</span>
+          </div>
+          <span class="connect-link-arrow">→</span>
+        </a>
+        <a class="connect-link" href="https://www.linkedin.com/in/jorge-leonardo-gonzalez-b80b2b402" target="_blank" rel="noopener">
+          <div class="connect-link-label">
+            <span class="connect-link-type">LinkedIn</span>
+            <span class="connect-link-value">jorge-leonardo-gonzalez</span>
+          </div>
+          <span class="connect-link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Base>
+
+<style>
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 2rem 5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow::before {
+    content: "";
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .hero-name span {
+    display: block;
+    color: var(--accent);
+    font-style: italic;
+  }
+  .hero-title {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+  }
+  .hero-statement {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+    font-style: italic;
+    color: var(--text-muted);
+    max-width: 640px;
+    line-height: 1.5;
+    border-left: 2px solid var(--accent);
+    padding-left: 1.25rem;
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2rem;
+    writing-mode: vertical-rl;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-scroll::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 3rem;
+    background: var(--border);
+  }
+
+  /* ── Sections ── */
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+    border-top: 1px solid var(--border-soft);
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .section-number {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    flex-shrink: 0;
+  }
+
+  /* ── About ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  .about-bio p {
+    font-size: 1.05rem;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    line-height: 1.8;
+  }
+  .about-values {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .value-item {
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    transition: border-color var(--transition), background var(--transition);
+  }
+  .value-item:hover {
+    border-color: var(--accent-dim);
+    background: var(--bg-hover);
+  }
+  .value-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+  .value-item p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── Ideas ── */
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .idea-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    transition: border-color var(--transition), background var(--transition),
+      transform var(--transition);
+    cursor: pointer;
+  }
+  .idea-card:hover {
+    border-color: var(--accent-dim);
+    background: var(--bg-hover);
+    transform: translateY(-2px);
+  }
+  .idea-card:hover .idea-arrow { color: var(--accent); }
+  .idea-tag {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .idea-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    line-height: 1.25;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    flex-grow: 1;
+  }
+  .idea-excerpt {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+  .idea-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+  .idea-date {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+  .idea-arrow {
+    color: var(--text-dim);
+    transition: color var(--transition);
+  }
+  .idea-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .idea-card.featured .idea-title {
+    font-size: 1.9rem;
+    line-height: 1.15;
+  }
+  .featured-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+  }
+  .featured-abstract {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── Connect ── */
+  .connect-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .connect-text p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+  .connect-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .connect-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    transition: border-color var(--transition), background var(--transition);
+  }
+  .connect-link:hover {
+    border-color: var(--accent-dim);
+    background: var(--bg-hover);
+  }
+  .connect-link:hover .connect-link-arrow { color: var(--accent); }
+  .connect-link-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .connect-link-type {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .connect-link-value {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .connect-link-arrow {
+    color: var(--text-dim);
+    transition: color var(--transition);
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow  { animation: fadeUp 0.7s 0.1s ease both; }
+  .hero-name     { animation: fadeUp 0.7s 0.2s ease both; }
+  .hero-title    { animation: fadeUp 0.7s 0.32s ease both; }
+  .hero-statement { animation: fadeUp 0.7s 0.44s ease both; }
+  .hero-scroll   { animation: fadeUp 0.7s 0.6s ease both; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .hero { padding: 7rem 1.25rem 4rem; }
+    section { padding: 4rem 1.25rem; }
+    .about-grid,
+    .connect-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .idea-card.featured { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible')
+    }),
+    { threshold: 0.1 }
+  )
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+</script>
