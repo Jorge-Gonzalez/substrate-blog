@@ -28,52 +28,10 @@ const rest = sorted.slice(1)
     <p class="hero-statement">
       I think in systems. Design taught me to see structure. Code taught me
       to question it. Now I build things at the intersection of both — and
-      write about what I find along the way.
+      write about what I find along the way. <a href="/about" class="hero-about-link">More about how I think →</a>
     </p>
     <span class="hero-scroll">Scroll</span>
   </section>
-
-  <section id="about">
-    <div class="section-header reveal">
-      <span class="section-number">01</span>
-      <h2>The Way I Think</h2>
-    </div>
-    <div class="about-grid">
-      <div class="about-bio reveal">
-        <p>I started in graphic design, moved into web development, and
-        somewhere along the way realized the most interesting problems live
-        at the border between disciplines. The same instinct that makes a
-        layout feel right tells you when a line of code is doing too much.</p>
-        <p>I am largely self-taught, which means I never learned to stop
-        asking why. Most conventions in design, in code, and even in
-        mathematics turn out to be choices that hardened into rules over
-        time — and choices can always be revisited. That skepticism is not
-        contrarianism. It is how I find better solutions.</p>
-        <p>This site is where I share what I am thinking about: tools I am
-        building, ideas I cannot stop turning over, and the occasional long
-        essay about something that should not work the way everyone assumes
-        it does.</p>
-      </div>
-      <div class="about-values reveal">
-        <div class="value-item">
-          <p class="value-label">Design Thinking</p>
-          <p>Every problem has a shape. Finding it before writing a single
-          line saves more time than any optimization afterward.</p>
-        </div>
-        <div class="value-item">
-          <p class="value-label">Radical Simplicity</p>
-          <p>The best solution is the one that does exactly one thing and
-          does it so well you never have to think about it again.</p>
-        </div>
-        <div class="value-item">
-          <p class="value-label">Independent Inquiry</p>
-          <p>The most useful ideas tend to arrive from outside the field
-          they end up changing. I take that seriously.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section id="ideas">
     <div class="section-header reveal">
       <span class="section-number">02</span>
@@ -480,6 +438,22 @@ const rest = sorted.slice(1)
     transform: none;
   }
 
+  .hero-about-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .hero-about-link:hover {
+    color: var(--accent-dim);
+  }
+
   /* ── Responsive ── */
   @media (max-width: 768px) {
     .hero { padding: 7rem 1.25rem 4rem; }
@@ -488,6 +462,7 @@ const rest = sorted.slice(1)
     .connect-inner { grid-template-columns: 1fr; gap: 2.5rem; }
     .idea-card.featured { grid-template-columns: 1fr; }
   }
+
 </style>
 
 <script>
