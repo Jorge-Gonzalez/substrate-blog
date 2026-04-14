@@ -18,6 +18,22 @@ const {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={`${title} — Substrate`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={`https://substrate.lat${Astro.url.pathname}`} />
+  <meta property="og:site_name" content="Substrate" />
+
+  <!-- Twitter/X -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={`${title} — Substrate`} />
+  <meta name="twitter:description" content={description} />
+
+  <!-- Canonical -->
+  <link rel="canonical" href={`https://substrate.lat${Astro.url.pathname}`} />
+
   <title>{title} — Substrate</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,6 +41,7 @@ const {
     href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap"
     rel="stylesheet"
   />
+  <link rel="stylesheet" href="/styles/global.css" />
 </head>
 <body>
 
@@ -32,7 +49,7 @@ const {
     <a class="nav-name" href="/">Jorge Gonzalez<span class="dot">·</span></a>
     <div class="nav-right">
       <ul class="nav-links">
-        <li><a href="/#about">About</a></li>
+        <li><a href="/about">About</a></li>
         <li><a href="/#ideas">Ideas</a></li>
         <li><a href="/#connect">Connect</a></li>
       </ul>
