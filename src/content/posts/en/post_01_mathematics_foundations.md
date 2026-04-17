@@ -6,6 +6,7 @@ topic: "Foundations · Mathematics · Philosophy"
 date: "2026-04-12"
 readingTime: "15 min"
 description: "What if the foundation everything is built on was chosen rather than proved — and some of those choices have been quietly causing problems ever since?"
+status: "published"
 ---
 
 Is Mathematics the language of pure logic, absolute truth, no room for opinion? What if the foundation everything is built on was chosen rather than proved — and some of those choices have been quietly causing problems ever since?
@@ -133,4 +134,4 @@ The contradictions in mathematical foundations are not the price of mathematical
 *This is part 1 of an ongoing series exploring what mathematics looks like when its foundational assumptions are questioned from first principles.*
 
 *Part 2: [Mathematics Has Been Solving a Problem It Created Itself](/posts/post_02_epsilon_geometry)*
-*Part 3: [Geometry as Process](/posts/post_03_geometry_as_process)*
+*Part 3: [Geometry as Process — Direction, Distance, and a Rule](/posts/post_03_geometry_as_process)*

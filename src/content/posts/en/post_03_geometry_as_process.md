@@ -6,13 +6,14 @@ topic: "Foundations · Geometry · Computation"
 date: "2026-04-14"
 readingTime: "14 min"
 description: "What if geometry is not built from objects at locations but from moves? Three parameters — direction, distance, and a deviation function — turn out to be enough to construct every geometric shape, connect to Fourier analysis, and mirror the structure of a Turing machine."
+status: "published"
 ---
 
 # Geometry as Process — Direction, Distance, and a Rule
 
-**Series:** The Mathematics We Chose to Believe In — Part 3  
-**Topic:** Foundations · Geometry · Computation  
-**Date:** April 2026  
+**Series:** The Mathematics We Chose to Believe In — Part 3
+**Topic:** Foundations · Geometry · Computation
+**Date:** April 2026
 **Reading time:** 14 min
 
 ---
@@ -169,5 +170,5 @@ And most interestingly: if geometric shapes are computations, what does it mean 
 
 *This is part 3 of an ongoing series exploring what mathematics looks like when its foundational assumptions are questioned from first principles.*
 
-*Part 1: [The Mathematics We Chose to Believe In](mathematics_blog_post.html)*
-*Part 2: [Mathematics Has Been Solving a Problem It Created Itself](post_02_epsilon_geometry.html)*
+*Part 1: [The Mathematics We Chose to Believe In](/posts/post_01_mathematics_foundations)*
+*Part 2: [Mathematics Has Been Solving a Problem It Created Itself](/posts/post_02_epsilon_geometry)*

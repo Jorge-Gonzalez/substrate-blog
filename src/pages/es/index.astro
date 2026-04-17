@@ -1,13 +1,13 @@
 ---
-import Base from '../layouts/Base.astro'
+import Base from '../../layouts/Base.astro'
 import { getCollection } from 'astro:content'
-import { formatDate } from '../utils/formatDate'
-import { useTranslations } from '../i18n/ui'
+import { formatDate } from '../../utils/formatDate'
+import { useTranslations } from '../../i18n/ui'
 
-const lang = 'en'
+const lang = 'es'
 const t    = useTranslations(lang)
 
-const posts  = await getCollection('postsEn')
+const posts  = await getCollection('postsEs')
 const sorted = posts.sort((a, b) => {
   if (a.data.seriesPart && b.data.seriesPart) {
     return a.data.seriesPart - b.data.seriesPart
@@ -18,34 +18,34 @@ const featured = sorted[0]
 const rest     = sorted.slice(1)
 ---
 
-<Base title="Jorge Gonzalez">
+<Base title="Jorge Gonzalez" description="Ideas un nivel por debajo de lo obvio">
 
   <section class="hero" id="home">
     <div class="hero-eyebrow">
-      <span class="label">Web Designer &amp; Programmer</span>
+      <span class="label">Diseñador Web y Programador</span>
     </div>
     <h1 class="hero-name">
       Jorge
       <span>Gonzalez</span>
     </h1>
-    <p class="hero-title">Web Designer &amp; Programmer &mdash; Costa Rica</p>
+    <p class="hero-title">Diseñador Web y Programador &mdash; Costa Rica</p>
     <p class="hero-statement">
-      I think in systems. Design taught me to see structure. Code taught me
-      to question it. Now I build things at the intersection of both — and
-      write about what I find along the way. <a href="/about" class="hero-about-link">More about how I think →</a>
+      Pienso en sistemas. El diseño me enseñó a ver la estructura. El código me enseñó
+      a cuestionarla. Ahora construyo cosas en la intersección de ambos — y
+      escribo sobre lo que encuentro en el camino. <a href="/es/about" class="hero-about-link">Más sobre cómo pienso →</a>
     </p>
-    <span class="hero-scroll">Scroll</span>
+    <span class="hero-scroll">Bajar</span>
   </section>
 
   <section id="ideas">
     <div class="section-header reveal">
       <span class="section-number">02</span>
-      <h2>Ideas Worth Sharing</h2>
+      <h2>Ideas que vale la pena compartir</h2>
     </div>
     <div class="ideas-grid">
 
       {featured && (
-        <a class="idea-card featured reveal" href={`/posts/${featured.id}`}>
+        <a class="idea-card featured reveal" href={`/es/posts/${featured.id}`}>
           <div class="idea-meta">
             <p class="featured-label">
               {featured.data.series
@@ -65,7 +65,7 @@ const rest     = sorted.slice(1)
       )}
 
       {rest.map(post => (
-        <a class="idea-card reveal" href={`/posts/${post.id}`}>
+        <a class="idea-card reveal" href={`/es/posts/${post.id}`}>
           <p class="idea-tag">{post.data.topic}</p>
           <h3 class="idea-title">{post.data.title}</h3>
           <p class="idea-excerpt">{post.data.description}</p>
@@ -82,20 +82,21 @@ const rest     = sorted.slice(1)
   <section id="connect">
     <div class="section-header reveal">
       <span class="section-number">03</span>
-      <h2>Let's Think Together</h2>
+      <h2>Pensemos Juntos</h2>
     </div>
     <div class="connect-inner">
       <div class="connect-text reveal">
-        <p>I am interested in conversations that cross boundaries — between
-        design and code, between intuition and rigour, between the way things
-        are built and the way they could be built instead. If something I have
-        written made you think differently about a problem you are working on,
-        I would like to hear about it.</p>
-        <p>Currently building a text macro browser extension and thinking
-        through a compositional framework for web layouts. Always turning over
-        ideas at the foundations of mathematics, computation, and design.
-        Based in Costa Rica, available for projects that value thinking as
-        much as execution.</p>
+        <p>Me interesan las conversaciones que cruzan fronteras — entre
+        diseño y código, entre intuición y rigor, entre la manera en que
+        se construyen las cosas y cómo podrían construirse de otra manera.
+        Si algo que escribí te hizo pensar de forma diferente sobre un
+        problema en el que estás trabajando, me gustaría saberlo.</p>
+        <p>Actualmente construyendo una extensión de navegador para macros
+        de texto y pensando en un marco compositivo para diseño de
+        interfaces web. Siempre dando vueltas a ideas en los fundamentos de
+        las matemáticas, la computación y el diseño. Radicado en Costa Rica,
+        disponible para proyectos que valoran el pensamiento tanto como la
+        ejecución.</p>
       </div>
       <div class="connect-links reveal">
         <a class="connect-link" href="mailto:jorge.gonzalez@live.com">
@@ -126,7 +127,6 @@ const rest     = sorted.slice(1)
 </Base>
 
 <style>
-  /* ── Hero ── */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -209,8 +209,6 @@ const rest     = sorted.slice(1)
     height: 3rem;
     background: var(--border);
   }
-
-  /* ── Sections ── */
   section {
     max-width: 1100px;
     margin: 0 auto;
@@ -237,8 +235,6 @@ const rest     = sorted.slice(1)
     letter-spacing: 0.15em;
     flex-shrink: 0;
   }
-
-  /* ── Ideas ── */
   .ideas-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -325,8 +321,6 @@ const rest     = sorted.slice(1)
     color: var(--text-muted);
     line-height: 1.6;
   }
-
-  /* ── Connect ── */
   .connect-inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -379,8 +373,6 @@ const rest     = sorted.slice(1)
     color: var(--text-dim);
     transition: color var(--transition);
   }
-
-  /* ── Animations ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -390,7 +382,6 @@ const rest     = sorted.slice(1)
   .hero-title     { animation: fadeUp 0.7s 0.32s ease both; }
   .hero-statement { animation: fadeUp 0.7s 0.44s ease both; }
   .hero-scroll    { animation: fadeUp 0.7s 0.6s ease both; }
-
   .reveal {
     opacity: 0;
     transform: translateY(20px);
@@ -400,7 +391,6 @@ const rest     = sorted.slice(1)
     opacity: 1;
     transform: none;
   }
-
   .hero-about-link {
     display: inline-block;
     margin-top: 0.75rem;
@@ -413,8 +403,6 @@ const rest     = sorted.slice(1)
     transition: color var(--transition);
   }
   .hero-about-link:hover { color: var(--accent-dim); }
-
-  /* ── Responsive ── */
   @media (max-width: 768px) {
     .hero { padding: 7rem 1.25rem 4rem; }
     section { padding: 4rem 1.25rem; }

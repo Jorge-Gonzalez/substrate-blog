@@ -6,13 +6,14 @@ topic: "Foundations · Geometry · Calculus"
 date: "2026-04-13"
 readingTime: "12 min"
 description: "Resolution is not something calculus produces. It is something calculus should have started with. A first attempt at discrete geometry, its honest failure, and what the failure revealed."
+status: "published"
 ---
 
 # Mathematics Has Been Solving a Problem It Created Itself
 
-**Series:** The Mathematics We Chose to Believe In — Part 2  
-**Topic:** Foundations · Geometry · Calculus  
-**Date:** April 2026  
+**Series:** The Mathematics We Chose to Believe In — Part 2
+**Topic:** Foundations · Geometry · Calculus
+**Date:** April 2026
 **Reading time:** 12 min
 
 ---
@@ -21,7 +22,7 @@ description: "Resolution is not something calculus produces. It is something cal
 
 In the first part of this series we asked whether the foundations of mathematics were discovered or chosen. The answer, it turns out, is mostly chosen — and some of those choices introduced contradictions that have been quietly managed ever since.
 
-This part is about one of those managed contradictions, and what happens when you stop managing it and fix it instead.
+This part is about one of those managed contradictions, and aims to present an alternate approach to tackle it.
 
 ---
 
@@ -47,9 +48,9 @@ The natural number line has a property so basic we rarely think about it: every 
 
 Now try adding infinity to that line.
 
-The distance from infinity to 100 is infinite. The distance from infinity to 2 is also infinite. From the perspective of infinity those distances are indistinguishable — which means 100 and 2 become, in a precise sense, equivalent. The ordering collapses. The property that makes the number line useful simply does not survive contact with infinity as a point on that line.
+The distance from infinity to 100 is infinite. The distance from infinity to 2 is also infinite. From the perspective of infinity those distances are indistinguishable — which means 100 and 2 become, from that perspective, equivalent. The ordering collapses. The property that makes the number line useful simply does not survive contact with infinity as a point on that line.
 
-Infinity is not compatible with the ordered structure of numbers. Adding it to the line does not extend it. It breaks it.
+Infinity is incompatible with the ordered structure of numbers. Adding it to the line does not extend it. It breaks it.
 
 **On Cantor's hierarchy of infinities**
 
@@ -145,5 +146,5 @@ That question, and where it leads, is the subject of the next part.
 
 *This is part 2 of an ongoing series exploring what mathematics looks like when its foundational assumptions are questioned from first principles.*
 
-*Part 1: [The Mathematics We Chose to Believe In](mathematics_blog_post.html)*
-*Part 3: [Geometry as Process](post_03_geometry_as_process.html)*
+*Part 1: [The Mathematics We Chose to Believe In](/posts/post_01_mathematics_foundations)*
+*Part 3: [Geometry as Process — Direction, Distance, and a Rule](/posts/post_03_geometry_as_process)*

@@ -1,8 +1,7 @@
 # Substrate — Technical Context
 
-> This document covers the technical setup, stack, processes, and
-> site structure for substrate.lat. For conceptual framework and ideas
-> see IDEAS.md.
+> This document covers the technical setup, stack, processes, and site
+> structure for substrate.lat. For conceptual framework and ideas see IDEAS.md.
 
 ---
 
@@ -10,7 +9,7 @@
 
 **substrate.lat** — personal site and blog by Jorge Gonzalez.
 Live at https://substrate.lat
-Repository: GitHub — Jorge-Gonzalez/substrate-blog
+Repository: GitHub — substrate-blog
 
 ---
 
@@ -23,7 +22,7 @@ Repository: GitHub — Jorge-Gonzalez/substrate-blog
 | Repository | GitHub — substrate-blog | Connected to Cloudflare Pages |
 | Domain | substrate.lat | Registered on Namecheap, DNS on Cloudflare |
 | Package manager | pnpm | |
-| Node | 22 | |
+| Node | ≥22.12.0 | Specified in package.json engines field |
 
 ---
 
@@ -46,6 +45,7 @@ Repository: GitHub — Jorge-Gonzalez/substrate-blog
 --text-dim:     #b8b0a4;
 --accent:       #b85c20;   /* warm terracotta */
 --accent-dim:   #d4845a;
+--accent-pale:  rgba(184,92,32,.07);
 ```
 
 **Colors — Dark theme**
@@ -60,13 +60,50 @@ Repository: GitHub — Jorge-Gonzalez/substrate-blog
 --text-dim:     #3d3d38;
 --accent:       #c97d3a;   /* warm amber */
 --accent-dim:   #7a4a1f;
+--accent-pale:  rgba(201,125,58,.08);
 ```
 
-**Theme toggle** — pill button in nav, persists in localStorage via
-`data-theme="dark"` on `<html>` element. Script in Base.astro.
+**Theme toggle** — pill button in nav, persists preference in localStorage
+via `data-theme="dark"` on `<html>` element. Script in Base.astro.
+System preference (`prefers-color-scheme`) respected on first visit.
 
 **Aesthetic** — editorial, typographically serious, warm tones. Not a
 developer portfolio. Closer to a literary magazine with technical content.
+
+---
+
+## Internationalisation (i18n)
+
+The site supports English (default, no URL prefix) and Spanish (`/es/`).
+Built on Astro 6's built-in i18n routing with `prefixDefaultLocale: false`.
+
+**URL structure**
+- English: `substrate.lat/` `substrate.lat/about` `substrate.lat/posts/slug`
+- Spanish: `substrate.lat/es/` `substrate.lat/es/about` `substrate.lat/es/posts/slug`
+
+**Content collections**
+- `postsEn` — `src/content/posts/en/*.md`
+- `postsEs` — `src/content/posts/es/*.md`
+
+**UI strings** — `src/i18n/ui.ts`
+All static strings (nav, footer, post labels, theme toggle) live here
+as typed translation objects for `en` and `es`. Every page imports
+`useTranslations(lang)` and calls `t('key')`.
+
+**Language switcher** — `EN · ES` inline in the nav, highlights active
+language. Switches to the equivalent page in the other language.
+
+**Post frontmatter** — keys always in English, values translated per language.
+Required fields: `title`, `topic`, `date`, `readingTime`, `description`, `status`.
+Optional: `series`, `seriesPart`.
+`status` is `'published' | 'draft'` (default `'published'`).
+
+**Translation workflow** — GitHub Actions + PRs + Resend email
+- `translate.yml`: detects new/changed English content, calls Anthropic API,
+  opens a PR with the Spanish draft for review
+- `translation-reminder.yml`: weekly schedule, emails via Resend if
+  translation PRs older than 7 days are still open
+- Review happens in the GitHub PR diff editor — merge = deployed
 
 ---
 
@@ -75,34 +112,42 @@ developer portfolio. Closer to a literary magazine with technical content.
 ```
 substrate-blog/
 ├── src/
-│   ├── components/           ← shared components (currently unused)
+│   ├── components/               ← shared components (currently unused)
+│   ├── i18n/
+│   │   └── ui.ts                 ← all UI strings in EN + ES
 │   ├── layouts/
-│   │   └── Base.astro        ← shared HTML shell, nav, footer,
-│   │                            theme toggle, SEO meta tags
+│   │   └── Base.astro            ← shared HTML shell, nav, language
+│   │                                switcher, theme toggle, SEO meta tags
 │   ├── pages/
-│   │   ├── index.astro       ← homepage
-│   │   ├── about.astro       ← about page
-│   │   └── posts/
-│   │       └── [...slug].astro  ← dynamic post route with
-│   │                               prev/next series navigation
+│   │   ├── index.astro           ← English homepage
+│   │   ├── about.astro           ← English about page
+│   │   ├── posts/
+│   │   │   └── [...slug].astro   ← English post route
+│   │   └── es/
+│   │       ├── index.astro       ← Spanish homepage
+│   │       ├── about.astro       ← Spanish about page
+│   │       └── posts/
+│   │           └── [...slug].astro ← Spanish post route (draft fallback)
 │   ├── content/
-│   │   └── posts/            ← markdown post files
+│   │   └── posts/
+│   │       ├── en/               ← English markdown posts
+│   │       └── es/               ← Spanish markdown posts
 │   ├── styles/
-│   │   └── global.css        ← CSS variables, tokens, base styles
+│   │   └── global.css            ← CSS variables, tokens, base styles
 │   └── utils/
-│       └── formatDate.ts     ← formats date string to "Month Year"
-├── public/                   ← static assets
-├── reference/                ← not deployed, gitignored
-│   ├── personal_site_template.html
-│   ├── mathematics_blog_post.html
-│   ├── number_line_infinity_perspective.html
-│   └── mathematical_foundations_critique.docx
+│       └── formatDate.ts         ← locale-aware date formatting
+├── public/                       ← static assets
+├── scripts/                      ← Node scripts (translation automation)
+├── .github/
+│   └── workflows/
+│       ├── translate.yml         ← auto-translate on content push
+│       └── translation-reminder.yml ← weekly PR reminder via email
 ├── context/
-│   ├── IDEAS.md              ← conceptual framework and ideas
-│   └── TECHNICAL.md          ← this document
-├── astro.config.mjs
-├── src/content.config.ts     ← Astro 6 content collection config
-├── wrangler.toml             ← Cloudflare Pages config
+│   ├── IDEAS.md                  ← conceptual framework and ideas
+│   └── TECHNICAL.md              ← this document
+├── astro.config.mjs              ← Astro config with i18n settings
+├── src/content.config.ts         ← content collections: postsEn, postsEs
+├── wrangler.toml                 ← Cloudflare Pages config
 └── package.json
 ```
 
@@ -113,65 +158,93 @@ substrate-blog/
 ### Post frontmatter schema
 ```yaml
 ---
-title: "Post Title"
-series: "Series Name"        # optional
-seriesPart: 1                # optional, integer
-topic: "Topic · Subtopic"
-date: "2026-04-01"           # YYYY-MM-DD
-readingTime: "15 min"
-description: "SEO description and post card excerpt"
+title: "Post Title"           # string, required — translated per language
+series: "Series Name"         # string, optional — translated per language
+seriesPart: 1                 # integer, optional — same across languages
+topic: "Topic · Subtopic"     # string, required — translated per language
+date: "2026-04-01"            # YYYY-MM-DD, required — same across languages
+readingTime: "15 min"         # string, required — translated per language
+description: "..."            # string, required — translated per language
+status: "published"           # 'published' | 'draft', default 'published'
 ---
 ```
 
 ### Published posts
 
-| File | Title | Series Part |
+| Slug | English title | Series part |
 |---|---|---|
-| `post_01_mathematics_foundations.md` | The Mathematics We Chose to Believe In | 1 |
-| `post_02_epsilon_geometry.md` | Mathematics Has Been Solving a Problem It Created Itself | 2 |
-| `post_03_geometry_as_process.md` | Geometry as Process — Direction, Distance, and a Rule | 3 |
+| `post_01_mathematics_foundations` | The Mathematics We Chose to Believe In | 1 |
+| `post_02_epsilon_geometry` | Mathematics Has Been Solving a Problem It Created Itself | 2 |
+| `post_03_geometry_as_process` | Geometry as Process — Direction, Distance, and a Rule | 3 |
 
-### Post sorting
-Posts in the ideas grid sort by `seriesPart` if both have it, otherwise
-by date descending. Featured card is always the first in the sorted list.
+All three posts have Spanish translations published.
 
 ### Adding a new post
-1. Create markdown file in `src/content/posts/`
-2. Add frontmatter with all required fields
-3. Write content in markdown
-4. Commit and push — Cloudflare builds automatically
+1. Create `src/content/posts/en/your-slug.md` with frontmatter + content
+2. Push to master — Cloudflare deploys the English version
+3. GitHub Action opens a Spanish translation PR automatically
+4. Review and merge the PR — Spanish version goes live
+
+### Post sorting
+Posts sort by `seriesPart` if both posts have it, otherwise by date
+descending. Featured card is always the first in the sorted list.
 
 ---
 
 ## Key Components
 
 ### Base.astro
-- Shared HTML shell for all pages
+Shared HTML shell for all pages. Accepts `title` and `description` props.
 - Google Fonts import
 - global.css import
-- Nav with theme toggle
-- Footer
-- SEO meta tags (Open Graph, Twitter, canonical)
-- Theme toggle script
+- Fixed nav with language switcher and theme toggle
+- `<html lang={lang}>` and `hreflang` alternate links for SEO
+- Footer with translated role string
+- Theme toggle script (localStorage + system preference on first visit)
 
-### index.astro
-- Hero section with placement vector link to about page
-- Ideas grid with featured card and regular cards
-- Connect section with real contact details:
-  - jorge.gonzalez@live.com
-  - github.com/Jorge-Gonzalez
-  - linkedin.com/in/jorge-leonardo-gonzalez-b80b2b402
+### index.astro / es/index.astro
+Hero, ideas grid (featured + regular cards), connect section.
+English page uses `postsEn` collection, Spanish uses `postsEs`.
 
-### [...slug].astro
-- Dynamic post route
-- Prev/next series navigation
-- Post header with series label, title, topic, date, reading time
-- Full markdown body with typography styles
-- Back to ideas link
+### about.astro / es/about.astro
+Personal statement pages. No skills list, no CV.
 
-### about.astro
-- Personal statement
-- No skills list, no CV — communicates through the quality of thinking
+### posts/[...slug].astro / es/posts/[...slug].astro
+Dynamic post route with full markdown body, prev/next series navigation,
+comments section (Remark42), and back link.
+Spanish route shows a "translation pending" notice if `status: 'draft'`
+and falls back to the English content.
+
+---
+
+## Comments — Remark42
+
+Self-hosted comment system at comments.substrate.lat.
+
+**Infrastructure**
+- Service: Railway project `remark42`, service `remark42`
+- Image: `umputun/remark42:latest`
+- Storage: BoltDB at `/srv/var/data/substrate.db` on persistent Railway volume
+- Backups: auto-backup every 24h to `/srv/var/backup`
+- Deployment repo: `/mnt/data/Documents/code/remark42-railway`
+
+**Auth providers:** GitHub OAuth, Google OAuth, Email (Resend magic link), Anonymous
+
+**Frontend integration**
+- Embedded in post page via `<div id="remark42">` and loader script
+- Theme syncs with site toggle via `window.REMARK42.changeTheme()`
+- MutationObserver on `data-theme` attribute drives runtime switching
+- `no_footer: true` — Remark42 branding hidden
+- Widget wrapped in a card using `--bg-card` and `--border` CSS variables
+
+**Admin panel:** https://comments.substrate.lat/web
+
+**Railway CLI**
+```bash
+cd /mnt/data/Documents/code/remark42-railway
+railway up --detach
+railway logs
+```
 
 ---
 
@@ -182,7 +255,6 @@ by date descending. Featured card is always the first in the sorted list.
 - Build command: `pnpm astro build`
 - Output directory: `dist`
 - Production URL: https://substrate.lat
-- Pages URL: https://substrate-blog.pages.dev
 
 **wrangler.toml**
 ```toml
@@ -190,35 +262,15 @@ name = "substrate-blog"
 pages_build_output_dir = "dist"
 ```
 
-**DNS**
-- Registrar: Namecheap
-- Nameservers: anuj.ns.cloudflare.com / suzanne.ns.cloudflare.com
-- DNS managed in Cloudflare
-- AI crawlers: blocked on all pages
+**DNS — Cloudflare**
+- `substrate.lat` → Cloudflare Pages
+- `comments.substrate.lat` → Railway (CNAME, DNS only — not proxied)
 
 ---
 
 ## Analytics
 
-Cloudflare Web Analytics — built in, free, privacy-preserving.
-No cookie banner required.
-
----
-
-## Comments (pending setup)
-
-**Chosen solution: Remark42**
-- Self-hosted, open source
-- Multiple login providers: Google, GitHub, Twitter/X, email, anonymous
-- No ads, no tracking, data stays under your control
-
-**Planned setup:**
-1. Deploy Remark42 on Railway (Docker container)
-2. Configure OAuth providers — Google as minimum
-3. Point `comments.substrate.lat` at Railway deployment via Cloudflare DNS
-4. Add Remark42 script to `src/pages/posts/[...slug].astro`
-
-**Status: not yet implemented**
+Cloudflare Web Analytics — built in, privacy-preserving. No cookie banner.
 
 ---
 
@@ -239,8 +291,7 @@ git push origin master
 
 **Clear cache if styles not updating:**
 ```bash
-rm -rf .astro
-pnpm dev
+rm -rf .astro && pnpm dev
 ```
 
 ---
@@ -250,10 +301,11 @@ pnpm dev
 - Do not redesign the visual aesthetic — it was deliberately chosen
 - Do not add complexity to the stack without a clear reason
 - Do not add a CMS — content stays in markdown files in the repository
-- Do not add comments, likes, or social features beyond Remark42
+- Do not add likes or social features beyond Remark42 comments
 - Do not use Arial, Inter, Roboto, or system fonts — typography is intentional
 - Do not separate the series posts — they link to each other intentionally
 - Do not present Smoothless Geometry as finished theory — it is developing
+- Do not add a third language without updating the routing architecture first
 
 ---
 

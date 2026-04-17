@@ -1,0 +1,123 @@
+---
+import Base from '../../layouts/Base.astro'
+---
+
+<Base title="Acerca de" description="Siempre me ha fascinado cómo funcionan las cosas — el tipo de pensamiento que sigue las preguntas más allá de los límites de cualquier disciplina.">
+
+  <article class="about">
+
+    <header class="about-header">
+      <span class="about-label">Acerca de</span>
+      <h1 class="about-title">Jorge Gonzalez</h1>
+      <p class="about-subtitle">Diseñador Web y Programador — Costa Rica</p>
+    </header>
+
+    <div class="about-body">
+
+      <p class="about-lead">
+        Siempre me ha fascinado cómo funcionan las cosas — ese tipo de
+        pensamiento que sigue las preguntas más allá de los límites de
+        cualquier disciplina, llegando a veces a territorio sin mapa ni
+        formación formal.
+      </p>
+
+      <p>
+        Algo que he descubierto con los años es que existe una capa de
+        pensamiento más rápida y asociativa debajo de la consciente — procesa
+        en paralelo y saca conexiones a la superficie antes de que el lenguaje
+        alcance a nombrarlas. Aprender a darle espacio, a desacelerar lo
+        suficiente para escucharla, la transforma de una sensación vaga en
+        algo más parecido a un instrumento de trabajo. En la misma línea, una
+        obsesión de toda la vida con el diseño — no como estética sino como el
+        estudio de por qué las cosas están estructuradas como están — ha
+        resultado ser inesperadamente transferible. Un ojo entrenado para
+        encontrar patrones y fallas estructurales en un dominio empieza a
+        encontrarlos en todos los demás. Los dominios cambian. La pregunta
+        sigue siendo la misma.
+      </p>
+
+      <p>
+        Soy diseñador web y programador radicado en Costa Rica. Construyo
+        herramientas, pienso en sistemas y ocasionalmente escribo ensayos
+        largos sobre suposiciones fundamentales que resultan ser más frágiles
+        de lo que parecen. Mi formación es en diseño gráfico. La brecha entre
+        diseño y programación resulta ser uno de los lugares más productivos
+        en los que pararse.
+      </p>
+
+      <p>
+        Estas son mis propias explicaciones de cómo pienso. Las sostengo con
+        cierta soltura — todos somos propensos a construir narrativas
+        halagadoras sobre nosotros mismos, y yo no soy la excepción. Pero por
+        lo que vale, de aquí viene el trabajo en este sitio. No de un
+        currículo, sino de seguir la incomodidad hasta que se convierte en un
+        patrón, y seguir el patrón hasta que se convierte en una pregunta que
+        vale la pena escribir.
+      </p>
+
+      <p>
+        Actualmente construyendo una extensión de navegador para macros de
+        texto, pensando en un marco compositivo para diseño de interfaces web,
+        y en algún lugar del trasfondo, trabajando en cómo se ve la geometría
+        cuando reemplazas objetos suaves infinitos por pasos dirigidos y
+        reglas. Las ideas no siempre saben a qué categoría pertenecen.
+        Generalmente eso es buena señal.
+      </p>
+
+    </div>
+
+  </article>
+
+</Base>
+
+<style>
+  .about {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 8rem 1.5rem 6rem;
+  }
+  .about-header {
+    margin-bottom: 3.5rem;
+    border-bottom: 1px solid var(--border-soft);
+    padding-bottom: 2rem;
+  }
+  .about-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .about-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .about-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .about-body p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 1.6rem;
+  }
+  .about-lead {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem) !important;
+    font-style: italic;
+    color: var(--text-muted) !important;
+    border-left: 2px solid var(--accent);
+    padding-left: 1.25rem;
+    margin-bottom: 2.5rem !important;
+  }
+</style>

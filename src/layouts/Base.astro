@@ -1,19 +1,26 @@
 ---
 import '../styles/global.css'
+import { getLangFromUrl, getPathWithoutLocale, useTranslations } from '../i18n/ui'
 
 interface Props {
-  title?: string
+  title?:       string
   description?: string
 }
 
 const {
-  title = 'Substrate',
+  title       = 'Substrate',
   description = 'Ideas one level below the obvious'
 } = Astro.props
+
+const lang    = getLangFromUrl(Astro.url)
+const t       = useTranslations(lang)
+const barePath = getPathWithoutLocale(Astro.url.pathname)
+const enUrl   = barePath
+const esUrl   = '/es' + (barePath === '/' ? '' : barePath)
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,6 +38,11 @@ const {
   <meta name="twitter:title" content={`${title} — Substrate`} />
   <meta name="twitter:description" content={description} />
 
+  <!-- Alternate language links -->
+  <link rel="alternate" hreflang="en" href={`https://substrate.lat${enUrl}`} />
+  <link rel="alternate" hreflang="es" href={`https://substrate.lat${esUrl}`} />
+  <link rel="alternate" hreflang="x-default" href={`https://substrate.lat${enUrl}`} />
+
   <!-- Canonical -->
   <link rel="canonical" href={`https://substrate.lat${Astro.url.pathname}`} />
 
@@ -45,16 +57,23 @@ const {
 <body>
 
   <nav>
-    <a class="nav-name" href="/">Jorge Gonzalez<span class="dot">·</span></a>
+    <a class="nav-name" href={lang === 'es' ? '/es' : '/'}>Jorge Gonzalez<span class="dot">·</span></a>
     <div class="nav-right">
       <ul class="nav-links">
-        <li><a href="/about">About</a></li>
-        <li><a href="/#ideas">Ideas</a></li>
-        <li><a href="/#connect">Connect</a></li>
+        <li><a href={lang === 'es' ? '/es/about' : '/about'}>{t('nav.about')}</a></li>
+        <li><a href={lang === 'es' ? '/es#ideas' : '/#ideas'}>{t('nav.ideas')}</a></li>
+        <li><a href={lang === 'es' ? '/es#connect' : '/#connect'}>{t('nav.connect')}</a></li>
       </ul>
+
+      <div class="lang-switcher">
+        <a href={enUrl} class:list={['lang-link', { active: lang === 'en' }]}>EN</a>
+        <span class="lang-sep">·</span>
+        <a href={esUrl} class:list={['lang-link', { active: lang === 'es' }]}>ES</a>
+      </div>
+
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <span id="themeIcon">☽</span>
-        <span id="themeLabel">Dark</span>
+        <span id="themeLabel" data-dark={t('theme.dark')} data-light={t('theme.light')}>{t('theme.dark')}</span>
       </button>
     </div>
   </nav>
@@ -63,7 +82,7 @@ const {
 
   <footer>
     <span class="footer-name">Jorge Gonzalez</span>
-    <span class="footer-copy">2026 — Web Designer, Programmer & Independent Thinker</span>
+    <span class="footer-copy">2026 — {t('footer.role')}</span>
   </footer>
 
 </body>
@@ -97,6 +116,7 @@ const {
   .nav-right {
     display: flex;
     align-items: center;
+    gap: 1.5rem;
   }
 
   .nav-links {
@@ -116,6 +136,31 @@ const {
 
   .nav-links a:hover { color: var(--accent); }
 
+  /* ── Language switcher ── */
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+  }
+
+  .lang-link {
+    color: var(--text-dim);
+    transition: color var(--transition);
+    text-transform: uppercase;
+  }
+
+  .lang-link:hover      { color: var(--accent); }
+  .lang-link.active     { color: var(--accent); }
+
+  .lang-sep {
+    color: var(--border);
+    font-size: 0.5rem;
+  }
+
+  /* ── Theme toggle ── */
   .theme-toggle {
     background: none;
     border: 1px solid var(--border);
@@ -131,7 +176,6 @@ const {
     text-transform: uppercase;
     color: var(--text-muted);
     transition: border-color var(--transition), color var(--transition);
-    margin-left: 1.5rem;
   }
 
   .theme-toggle:hover {
@@ -172,7 +216,7 @@ const {
   const label  = document.getElementById('themeLabel')
   const html   = document.documentElement
 
-  const saved  = localStorage.getItem('theme')
+  const saved      = localStorage.getItem('theme')
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
   if (saved === 'dark' || (!saved && systemDark)) applyDark()
@@ -182,7 +226,8 @@ const {
       html.removeAttribute('data-theme')
       localStorage.setItem('theme', 'light')
       if (icon)  icon.textContent  = '☽'
-      if (label) label.textContent = 'Dark'
+      // restore translated label from data attribute
+      if (label) label.textContent = label.dataset.dark ?? 'Dark'
     } else {
       applyDark()
       localStorage.setItem('theme', 'dark')
@@ -190,8 +235,8 @@ const {
   })
 
   function applyDark() {
-    html.dataset.theme   = 'dark'
+    html.dataset.theme = 'dark'
     if (icon)  icon.textContent  = '○'
-    if (label) label.textContent = 'Light'
+    if (label) label.textContent = label.dataset.light ?? 'Light'
   }
 </script>
