@@ -82,6 +82,7 @@ const { Content } = await render(post)
       url:        window.location.href,
       theme:      theme,
       components: ['embed'],
+      no_footer:  true,
     }
 
     // Load the Remark42 embed script
@@ -328,6 +329,25 @@ const { Content } = await render(post)
     font-size: 1.1rem;
     font-weight: 400;
     color: var(--text-muted);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Wrap the iframe in a card that matches the site's card background,
+     so the widget sits on --bg-card rather than floating on --bg.
+     This makes the colour delta between Remark42's internal white/dark
+     and the page feel deliberate rather than accidental. */
+  #remark42 {
+    background:    var(--bg-card);
+    border:        1px solid var(--border);
+    border-radius: var(--radius);
+    padding:       1.5rem;
+    min-height:    120px;
+  }
+
+  /* Remark42 injects an iframe — let it breathe */
+  #remark42 iframe {
+    border:  none;
+    display: block;
+    width:   100%;
   }
 </style>

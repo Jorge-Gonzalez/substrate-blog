@@ -172,8 +172,10 @@ const {
   const label  = document.getElementById('themeLabel')
   const html   = document.documentElement
 
-  const saved = localStorage.getItem('theme')
-  if (saved === 'dark') applyDark()
+  const saved  = localStorage.getItem('theme')
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+  if (saved === 'dark' || (!saved && systemDark)) applyDark()
 
   toggle?.addEventListener('click', () => {
     if (html.dataset.theme === 'dark') {
