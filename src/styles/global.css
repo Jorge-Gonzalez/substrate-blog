@@ -33,6 +33,25 @@
   --accent-pale:  rgba(201,125,58,.08);
 }
 
+/* Remark42 theme blending */
+:root {
+  --remark42Bg: #fbf8f2;
+  --remark42Filter: sepia(.07) brightness(1.025);
+}
+
+[data-theme="dark"] {
+  --remark42Bg: #282726;
+  --remark42Filter: sepia(.12) brightness(0.9) contrast(1.1);
+}
+
+#remark42 {
+  background-color: var(--remark42Bg);
+}
+
+#remark42 iframe {
+  filter: var(--remark42Filter);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
