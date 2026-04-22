@@ -141,12 +141,4 @@ Este marco no ofrece sabiduría.  Le da a la siguiente persona una visión más 
 
 ---
 
-
-*Esta es la parte 4 de una serie que explora cómo se ve la geometría cuando sus supuestos fundamentales se examinan desde los primeros principios.*
-
-*Parte 1: [Las matemáticas en las que elegimos creer](/posts/post_01_mathematics_foundations)*
-*Parte 2: [¿Por qué la geometría necesita ε?](/posts/post_02_epsilon_geometry)*
-*Parte 3: [Geometría como proceso: dirección, distancia y una regla](/posts/post_03_geometry_as_process)*
-*Parte 5: [Lo que abrió el marco](/posts/post_05_framework_projections)*
-
 El desarrollo matemático formal de este marco —definiciones precisas, el teorema de la construcción del cociente, la emergencia métrica, los teoremas de reconstrucción y equivalencia categórica, la clasificación de congruencias y los resultados del puente de Gromov-Hausdorff— se presenta en el artículo complementario: Una base procesual-relacional para la geometría.
