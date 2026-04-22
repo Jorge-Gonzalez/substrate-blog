@@ -6,7 +6,7 @@ import { useTranslations } from '../../i18n/ui'
 
 export async function getStaticPaths() {
   const posts = await getCollection('postsEn')
-  const sorted = posts.sort((a, b) => {
+  const sorted = posts.filter(p => !p.id.includes('/')).sort((a, b) => {
     if (a.data.seriesPart && b.data.seriesPart) {
       return a.data.seriesPart - b.data.seriesPart
     }

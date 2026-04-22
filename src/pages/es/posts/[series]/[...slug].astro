@@ -1,42 +1,41 @@
 ---
-import Base from '../../../layouts/Base.astro'
+import Base from '../../../../layouts/Base.astro'
 import { getCollection, render } from 'astro:content'
-import { formatDate } from '../../../utils/formatDate'
-import { useTranslations } from '../../../i18n/ui'
+import { formatDate } from '../../../../utils/formatDate'
+import { useTranslations } from '../../../../i18n/ui'
 
 export async function getStaticPaths() {
-  // Build routes from the English collection so every post always has a
-  // Spanish URL, even if the translation is still a draft.
   const enPosts = await getCollection('postsEn')
   const esPosts = await getCollection('postsEs')
 
-  const esMap = new Map(esPosts.map(p => [p.id, p]))
+  const enSeriesPosts = enPosts.filter(p => p.id.includes('/'))
+  const esMap         = new Map(esPosts.map(p => [p.id, p]))
 
-  const sorted = enPosts.filter(p => !p.id.includes('/')).sort((a, b) => {
-    if (a.data.seriesPart && b.data.seriesPart) {
-      return a.data.seriesPart - b.data.seriesPart
-    }
-    return new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-  })
+  return enSeriesPosts.map(enPost => {
+    const [series, ...rest] = enPost.id.split('/')
+    const siblings = enSeriesPosts
+      .filter(p => p.id.startsWith(series + '/'))
+      .sort((a, b) => (a.data.seriesPart ?? 0) - (b.data.seriesPart ?? 0))
+    const idx = siblings.findIndex(p => p.id === enPost.id)
 
-  const esSorted = sorted.map(s => {
-    const esS = esMap.get(s.id)
-    return (esS && esS.data.status !== 'draft') ? esS : s
-  })
-
-  return sorted.map((enPost, index) => {
-    const esPost    = esMap.get(enPost.id)
-    const isDraft   = !esPost || esPost.data.status === 'draft'
+    const esPost     = esMap.get(enPost.id)
+    const isDraft    = !esPost || esPost.data.status === 'draft'
     const activePost = isDraft ? enPost : esPost!
 
+    const esSiblings = siblings.map(s => {
+      const esS = esMap.get(s.id)
+      return (esS && esS.data.status !== 'draft') ? esS : s
+    })
+
     return {
-      params: { slug: enPost.id },
+      params: { series, slug: rest.join('/') },
       props: {
-        post:        activePost,
+        post: activePost,
         enPost,
         isDraft,
-        prev: index > 0 ? esSorted[index - 1] : null,
-        next: index < esSorted.length - 1 ? esSorted[index + 1] : null,
+        siblings: esSiblings,
+        prev: idx > 0 ? esSiblings[idx - 1] : null,
+        next: idx < esSiblings.length - 1 ? esSiblings[idx + 1] : null,
       },
     }
   })
@@ -45,7 +44,7 @@ export async function getStaticPaths() {
 const lang = 'es'
 const t    = useTranslations(lang)
 
-const { post, isDraft, prev, next } = Astro.props
+const { post, isDraft, siblings, prev, next } = Astro.props
 const { Content } = await render(post)
 ---
 
@@ -83,6 +82,21 @@ const { Content } = await render(post)
     </section>
 
     <footer class="post-footer">
+
+      <nav class="series-index">
+        <p class="series-index-label">{t('post.series_in')}</p>
+        <ol class="series-index-list">
+          {siblings.map(s => (
+            <li class:list={['series-index-item', { current: s.id === post.id }]}>
+              <a href={`/es/posts/${s.id}`} aria-current={s.id === post.id ? 'page' : undefined}>
+                <span class="series-index-part">{t('post.part')} {s.data.seriesPart}</span>
+                <span class="series-index-title">{s.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
       <div class="post-nav">
         {prev && (
           <a href={`/es/posts/${prev.id}`} class="post-nav-link prev">
@@ -97,7 +111,9 @@ const { Content } = await render(post)
           </a>
         )}
       </div>
+
       <a href="/es#ideas" class="back-link">{t('post.back')}</a>
+
     </footer>
 
   </article>
@@ -117,9 +133,9 @@ const { Content } = await render(post)
       no_footer:  true,
     }
 
-    const script = document.createElement('script')
-    script.src   = 'https://comments.substrate.lat/web/embed.js'
-    script.defer = true
+    const script   = document.createElement('script')
+    script.src     = 'https://comments.substrate.lat/web/embed.js'
+    script.defer   = true
     document.body.appendChild(script)
 
     const observer = new MutationObserver(() => {
@@ -297,20 +313,6 @@ const { Content } = await render(post)
     margin-bottom: 1.5rem;
   }
 
-  #remark42 {
-    background:    var(--bg-card);
-    border:        1px solid var(--border);
-    border-radius: var(--radius);
-    padding:       1.5rem;
-    min-height:    120px;
-  }
-
-  #remark42 iframe {
-    border:  none;
-    display: block;
-    width:   100%;
-  }
-
   /* ── Footer ── */
   .post-footer {
     margin-top: 4rem;
@@ -318,17 +320,72 @@ const { Content } = await render(post)
     border-top: 1px solid var(--border-soft);
   }
 
-  .back-link {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    transition: color var(--transition);
+  /* ── Series index ── */
+  .series-index {
+    margin-bottom: 3rem;
   }
 
-  .back-link:hover { color: var(--accent); }
+  .series-index-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
 
+  .series-index-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .series-index-item a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: border-color var(--transition), background var(--transition), color var(--transition);
+  }
+
+  .series-index-item a:hover {
+    border-color: var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+  }
+
+  .series-index-item.current a {
+    border-color: var(--accent-dim);
+    background: var(--bg-card);
+    color: var(--text);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .series-index-part {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .series-index-title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  /* ── Prev / Next ── */
   .post-nav {
     display: flex;
     justify-content: space-between;
@@ -372,4 +429,15 @@ const { Content } = await render(post)
     color: var(--text-muted);
     line-height: 1.3;
   }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color var(--transition);
+  }
+
+  .back-link:hover { color: var(--accent); }
 </style>

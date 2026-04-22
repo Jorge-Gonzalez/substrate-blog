@@ -20,6 +20,7 @@ export const ui = {
     'post.comments':          'Discussion',
     'post.translation_notice': 'This translation is pending review — showing English version',
     'post.part':              'Part',
+    'post.series_in':         'In this series',
     // Cards
     'card.featured': 'Featured',
     'card.part':     'Part',
@@ -43,6 +44,7 @@ export const ui = {
     'post.comments':          'Discusión',
     'post.translation_notice': 'Esta traducción está pendiente de revisión — mostrando versión en inglés',
     'post.part':              'Parte',
+    'post.series_in':         'En esta serie',
     // Cards
     'card.featured': 'Destacado',
     'card.part':     'Parte',
