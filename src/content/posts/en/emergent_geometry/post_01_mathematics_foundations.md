@@ -31,6 +31,8 @@ The same tension appears in physics: the electron modeled as a point particle le
 
 At the time of writing this, the problem was clear but the resolution was not. The framework developed in the later parts of this series does not attempt to repair the point as a primitive; it removes the requirement for it entirely. Objects are defined as equivalence classes of finite relational processes, and no dimensionless primitive is needed or invoked.
 
+The discomfort with dimensionless primitives is not unique to this account — mathematicians have long been aware of these tensions, and several approaches exist that work around them in different ways. What is specific here is the route taken: building geometric structure from finite composable steps, and letting metric properties emerge from those rules rather than assuming them at the outset.
+
 ---
 
 ## Infinity Is Embedded in Geometric Objects
@@ -58,6 +60,8 @@ But consider what makes a triangle a triangle. It has three sides. Three vertice
 > The circle is not a polygon with infinitely many sides. It is what polygons can approach, but never fully realize within this construction.
 
 The circle belongs to a different category in the classical formulation — not a discrete constructible figure, but what mathematicians call a *limit object*. Something defined as the outcome of a limiting process rather than a finite construction. Archimedes understood this intuitively when he approximated π by computing the perimeters of polygons with increasing numbers of sides. He was not constructing a circle directly; he was approaching one.
+
+The idea of modeling a circle through finite discrete structures is not new — it is a familiar tool in mathematics. The question this series pursues is different: not whether such models exist, but whether resolution itself can be treated as something external to what the shape *is*, rather than a property the shape approaches in the limit.
 
 The framework developed later in this series revisits this distinction. It suggests that the difference between polygons and circles may not lie in their fundamental nature, but in how they are represented and compared. In that setting, structures that appear continuous can be modeled using finite cyclic relations, with resolution treated as an external parameter rather than an intrinsic property of the object.
 

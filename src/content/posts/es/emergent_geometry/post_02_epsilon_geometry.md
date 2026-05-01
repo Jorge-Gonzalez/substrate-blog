@@ -33,19 +33,11 @@ La pregunta es si la resolución —la propiedad que el marco no puede localizar
 
 ## Un pensamiento sobre el infinito y el tamaño
 
-La primera parte de esta serie apuntaba hacia este argumento.  Aquí se ofrece como una perspectiva con la que vale la pena quedarse, porque está directamente relacionada con lo que sigue.
+La recta numérica tiene una propiedad simple que rara vez consideramos: cada número tiene una posición definida en relación con cualquier otro.  100 es mayor que 2.  Siempre.  Inambiguamente.  Ese orden es lo que hace que la recta numérica sea útil como herramienta de medición.
 
-La recta numérica natural tiene una propiedad tan básica que rara vez pensamos en ella: cada número tiene una posición definida en relación con cualquier otro.  100 es mayor que 2.  Siempre.  Inambiguamente.  Los matemáticos llaman a esto un *orden total* y es una de las propiedades más fundamentales que poseen los números.
+El infinito no encaja cómodamente en ese orden.  La distancia de 100 al "infinito" y la distancia de 2 al "infinito" son ambas infinitas — indistinguibles entre sí.  Los matemáticos no tratan el infinito como un punto en la recta numérica precisamente por esta razón: rompe la estructura que hace que la recta funcione.  El infinito funciona como una dirección hacia la que puedes moverte, no como un destino al que puedes llegar.
 
-Ahora intenta añadir infinito a esa línea.
-
-La distancia de infinito a 100 es infinita.  La distancia de infinito a 2 también es infinita.  Desde la perspectiva del infinito, esas distancias son indistinguibles.  El orden que hace que la recta numérica sea útil no sobrevive al contacto con el infinito como un punto en esa recta.
-
-Cantor demostró que el conjunto de los números reales no puede mapearse uno a uno sobre el conjunto de los números naturales, y concluyó que algunos infinitos son estrictamente mayores que otros.  El argumento diagonal detrás de esta prueba es técnicamente irrefutable.  Lo que demuestra es que ciertos conjuntos infinitos no pueden ponerse en correspondencia entre sí de una manera particular.  Ese es un resultado estructural genuino sobre cómo se comportan los conjuntos infinitos.
-
-La interpretación de ese resultado como una clasificación por *tamaño*, sin embargo, merece un examen cuidadoso.  El tamaño es un concepto que pertenece al mundo finito — se define por comparación y ordenamiento, precisamente las propiedades que se vuelven problemáticas cuando la infinitud se trata como un destino en lugar de una dirección.  La jerarquía de infinitos es real como descripción de las diferencias estructurales entre conjuntos.  Si esa jerarquía representa una clasificación por tamaño, o algo más parecido a una clasificación de comportamientos de correspondencia, es una pregunta que la prueba en sí misma no resuelve.  Es una cuestión de interpretación, no de matemáticas.
-
-Esto importa para lo que sigue porque el marco desarrollado a continuación nunca trata el infinito como un objeto con un tamaño.  El infinito solo aparece como la dirección en la que se mueve un parámetro de resolución al refinar, un proceso que puedes continuar, no un lugar al que llegas.  La cuestión de si una infinidad es mayor que otra simplemente no se plantea, porque nada en la construcción convierte la infinidad en algo que pueda ser comparado.
+Esto importa para lo que sigue porque el marco desarrollado a continuación toma esa observación en serio como principio de diseño.  El infinito aparece en él solo como la dirección en la que se mueve un parámetro de resolución al refinar — un proceso que puedes continuar indefinidamente, no un lugar al que llegas.  Nada en la construcción requiere tratar el infinito como un objeto o una posición.  La cuestión de cómo se comparan los infinitos entre sí simplemente no surge.
 
 ---
 
@@ -57,7 +49,7 @@ Ambas operaciones extraen una respuesta finita precisa de un objeto infinito.  T
 
 Funciona.  Es genuinamente hermoso en algunos lugares.  Pero la complejidad se deriva de una elección fundamental hecha al principio: construir la geometría sobre objetos lisos infinitos y luego recuperar la precisión finita cuando sea necesario.  Visto así, ε no es un parche para un defecto, sino el lenguaje que requiere el marco una vez que te has comprometido a trabajar con continuos.  Las definiciones ε no resuelven un problema; proporcionan una estructura rigurosa para razonar sobre la aproximación dentro de ese compromiso.
 
-La pregunta es si el compromiso fue necesario en primer lugar.  La resolución podría haberse declarado como un parámetro externo explícito al principio, perteneciente al contexto de comparación en lugar de al objeto que se describe, en lugar de reconstruirse al final mediante un proceso límite.
+La pregunta es si ese fue el único punto de partida viable, o una elección organizativa entre otras posibles.  La resolución podría haberse declarado como un parámetro externo explícito al principio, perteneciente al contexto de comparación en lugar de al objeto que se describe, en lugar de reconstruirse al final mediante un proceso límite.
 
 ---
 
@@ -109,7 +101,7 @@ La observación central sobre la resolución sobrevive independientemente al fra
 
 Diferenciación como pendiente directa entre pasos adyacentes.  Integración como una suma finita.  El teorema fundamental como una relación inversa obvia entre la diferenciación y la suma.  Estos resultados se derivan de hacer la resolución primitiva, no específicamente del disco ε.
 
-Lo que cambia no son los resultados, sino su estatus fundamental.  El cálculo clásico tiene resultados limpios en forma cerrada —la derivada de sin es cos, la integral de x² es x³/3— que dependen de la estructura suave e infinita.  En un marco basado en la resolución, esas se convierten en descripciones de patrones estables en la resolución: relaciones que se mantienen en todas las resoluciones suficientemente finas.  Los resultados no se pierden.  Se atribuyen al patrón relacional en lugar de a un objeto infinito.  La taquigrafía sigue siendo válida.  Lo que cambia es lo que representa.
+Lo que cambia no son los resultados, sino su interpretación.  El cálculo clásico tiene resultados limpios en forma cerrada —la derivada de sin es cos, la integral de x² es x³/3— que dependen de la estructura suave e infinita.  En un marco basado en la resolución, esas se convierten en descripciones de patrones estables en la resolución: relaciones que se mantienen en todas las resoluciones suficientemente finas.  Los resultados no se pierden.  Se atribuyen al patrón relacional en lugar de a un objeto infinito.  La taquigrafía sigue siendo válida.  Lo que cambia es lo que representa.
 
 ---
 

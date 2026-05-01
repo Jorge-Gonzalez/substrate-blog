@@ -33,19 +33,11 @@ The question is whether resolution — the property the framework cannot locate 
 
 ## A Thought About Infinity and Size
 
-The first part of this series pointed toward this argument. Here it is offered as a perspective worth sitting with, because it bears directly on what follows.
+The natural number line has a simple property we rarely think about: every number has a definite position relative to every other. 100 is greater than 2. Always. Unambiguously. That ordering is what makes the number line useful as a measuring tool.
 
-The natural number line has a property so basic we rarely think about it: every number has a definite position relative to every other. 100 is greater than 2. Always. Unambiguously. Mathematicians call this a *total order* and it is one of the most fundamental properties numbers possess.
+Infinity does not fit comfortably into that ordering. The distance from 100 to "infinity" and the distance from 2 to "infinity" are both infinite — indistinguishable from each other. Mathematicians do not treat infinity as a point on the number line for exactly this reason: it breaks the structure that makes the line work. Infinity functions as a direction you can move toward, not a destination you can reach.
 
-Now try adding infinity to that line.
-
-The distance from infinity to 100 is infinite. The distance from infinity to 2 is also infinite. From the perspective of infinity those distances are indistinguishable. The ordering that makes the number line useful does not survive contact with infinity as a point on that line.
-
-Cantor proved that the set of real numbers cannot be mapped one-to-one onto the set of natural numbers, and concluded that some infinities are strictly larger than others. The diagonal argument behind this proof is technically airtight. What it demonstrates is that certain infinite sets cannot be put into correspondence with each other in a particular way. That is a genuine structural result about how infinite sets behave.
-
-The interpretation of that result as a ranking by *size*, however, is worth examining carefully. Size is a concept that belongs to the finite world — it is defined by comparison and ordering, precisely the properties that become problematic when infinity is treated as a destination rather than a direction. The hierarchy of infinities is real as a description of structural differences between sets. Whether that hierarchy represents a ranking by size, or something more like a classification of correspondence behaviors, is a question the proof itself does not settle. It is a matter of interpretation, not of the mathematics.
-
-This matters for what follows because the framework developed below never treats infinity as an object with a size. Infinity appears only as the direction a resolution parameter moves when you refine — a process you can continue, not a place you arrive. The question of whether one infinity is bigger than another simply does not arise, because nothing in the construction ever turns infinity into something that could be compared.
+This matters for what follows because the framework developed below takes that observation seriously as a design principle. Infinity appears in it only as the direction a resolution parameter moves when you refine — a process you can continue indefinitely, not a place you arrive. Nothing in the construction requires treating infinity as an object or a position. The question of how infinities compare to each other simply does not arise.
 
 ---
 
@@ -57,7 +49,7 @@ Both operations extract a precise finite answer from an infinite object. The ent
 
 It works. It is genuinely beautiful in places. But the complexity follows from a foundational choice made at the beginning: to build geometry on infinite smooth objects, and then recover finite precision when needed. Seen this way, ε is not a patch for a flaw — it is the language the framework requires once you have committed to working with continua. The ε-definitions do not fix a problem; they provide rigorous structure for reasoning about approximation within that commitment.
 
-The question is whether the commitment was necessary in the first place. Resolution could have been declared as an explicit external parameter at the start — belonging to the context of comparison rather than to the object being described — rather than reconstructed at the end through a limit process.
+The question is whether that was the only viable starting point, or one organizational choice among others. Resolution could have been declared as an explicit external parameter at the start — belonging to the context of comparison rather than to the object being described — rather than reconstructed at the end through a limit process.
 
 ---
 
@@ -111,7 +103,7 @@ The core observation about resolution survives the ε-disk's failure independent
 
 Differentiation as a direct slope between adjacent steps. Integration as a finite sum. The fundamental theorem as an obvious inverse relationship between differencing and summing. These follow from making resolution primitive — not from the ε-disk specifically.
 
-What changes is not the results but their foundational status. Classical calculus has clean closed-form results — derivative of sin is cos, integral of x² is x³/3 — that depend on the smooth infinite structure. In a resolution-based framework those become descriptions of resolution-stable patterns: relationships that hold across all sufficiently fine resolutions. The results are not lost. They are attributed to the relational pattern rather than to an infinite object. The shorthand remains valid. What changes is what it is shorthand *for*.
+What changes is not the results but their interpretation. Classical calculus has clean closed-form results — derivative of sin is cos, integral of x² is x³/3 — that depend on the smooth infinite structure. In a resolution-based framework those become descriptions of resolution-stable patterns: relationships that hold across all sufficiently fine resolutions. The results are not lost. They are attributed to the relational pattern rather than to an infinite object. The shorthand remains valid. What changes is what it is shorthand *for*.
 
 ---
 

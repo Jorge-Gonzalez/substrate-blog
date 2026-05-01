@@ -31,6 +31,8 @@ La misma tensión aparece en física: el electrón modelado como una partícula 
 
 Al momento de escribir esto, el problema era claro pero la solución no.  El marco desarrollado en las últimas partes de esta serie no intenta reparar el punto como una primitiva; lo elimina por completo.  Los objetos se definen como clases de equivalencia de procesos relacionales finitos, y no se necesita ni se invoca ninguna primitiva adimensional.
 
+La incomodidad con las primitivas adimensionales no es exclusiva de este planteamiento — los matemáticos llevan mucho tiempo conscientes de estas tensiones, y existen varios enfoques que las abordan de diferentes maneras.  Lo que es específico aquí es el camino tomado: construir estructura geométrica a partir de pasos finitos componibles, y dejar que las propiedades métricas emerjan de esas reglas en lugar de asumirlas desde el principio.
+
 ---
 
 ## El infinito está incrustado en objetos geométricos
@@ -58,6 +60,8 @@ Pero considera qué hace que un triángulo sea un triángulo.  Tiene tres lados.
 El círculo no es un polígono con infinitos lados.  Es lo que los polígonos pueden aproximar, pero nunca realizar completamente dentro de esta construcción.
 
 El círculo pertenece a una categoría diferente en la formulación clásica: no es una figura discreta construible, sino lo que los matemáticos llaman un *objeto límite*.  Algo definido como el resultado de un proceso limitante en lugar de una construcción finita.  Arquímedes lo entendió intuitivamente cuando aproximó π calculando los perímetros de polígonos con un número creciente de lados.  No estaba construyendo un círculo directamente; se estaba acercando a uno.
+
+La idea de modelar un círculo mediante estructuras discretas finitas no es nueva — es una herramienta familiar en matemáticas.  La pregunta que persigue esta serie es diferente: no si tales modelos existen, sino si la resolución misma puede tratarse como algo externo a lo que la forma *es*, en lugar de una propiedad a la que la forma se aproxima en el límite.
 
 El marco desarrollado más adelante en esta serie retoma esta distinción.  Sugiere que la diferencia entre polígonos y círculos podría no residir en su naturaleza fundamental, sino en cómo se representan y comparan.  En ese contexto, las estructuras que parecen continuas pueden modelarse utilizando relaciones cíclicas finitas, con la resolución tratada como un parámetro externo en lugar de una propiedad intrínseca del objeto.
 

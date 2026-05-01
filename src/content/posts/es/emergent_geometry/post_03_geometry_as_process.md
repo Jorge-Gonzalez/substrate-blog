@@ -59,7 +59,7 @@ Es útil distinguir entre dos tipos de parámetros aquí.  La función de desvia
 
 Esta perspectiva no es desconocida para nadie que haya trabajado con gráficos vectoriales.  SVG, canvas, PostScript y gráficos de tortuga representan las formas como secuencias de comandos dirigidos — mover, línea, curva, arco — en lugar de como listas de puntos.  Estas son instrucciones que generan una ruta.  La forma es la trayectoria del proceso.
 
-Estos formatos fueron diseñados para resolver un problema práctico: cómo representar la geometría de forma compacta para el cálculo y la renderización, y llegaron de forma independiente a la misma respuesta: la descripción basada en procesos.  La convergencia entre sistemas no relacionados sugiere que el enfoque está rastreando algo real, no simplemente una representación conveniente.  El marco aquí puede entenderse como hacer explícita esa base implícita.
+Estos formatos fueron diseñados para resolver un problema práctico: cómo representar la geometría de forma compacta para el cálculo y la renderización, y llegaron de forma independiente a la misma respuesta: la descripción basada en procesos.  La convergencia entre sistemas no relacionados sugiere que el enfoque está rastreando algo real, no simplemente una representación conveniente.  El marco aquí puede entenderse como hacer explícita esa estructura implícita.
 
 ---
 
@@ -85,7 +85,7 @@ Esto explicita algo que a menudo se deja implícito: una curva suave y gradual r
 
 Una forma definida por d, θ y δ(n) no tiene posición.  La regla describe cómo se relacionan los pasos entre sí —sus direcciones y distancias relativas— pero no dice nada sobre dónde comienza la secuencia.  La colocación debe venir de fuera.
 
-Esto separa lo que una forma *es* de dónde *se coloca*: una distinción que la geometría clásica conoce informalmente como congruencia, pero que no impone a nivel fundamental porque las coordenadas están incorporadas desde el principio.
+Esto separa lo que una forma *es* de dónde *se coloca*: una distinción que la geometría clásica conoce informalmente como congruencia, pero que no impone por defecto porque las coordenadas están incorporadas desde el principio.
 
 La consecuencia práctica es que el ancla inicial no es una primitiva geométrica.  Funciona como una etiqueta de referencia, dondequiera que el contexto contenedor decida comenzar, no como un objeto con estructura independiente.  Esto elimina la necesidad de tratar los puntos como fundamentales.  El problema del punto que Euclides introdujo con "aquello que no tiene parte" simplemente no surge en esta construcción.  No porque esté resuelto, sino porque la construcción nunca lo requirió.
 

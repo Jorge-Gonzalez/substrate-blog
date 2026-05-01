@@ -59,7 +59,7 @@ It is useful to distinguish between two kinds of parameters here. The deviation 
 
 This perspective is not unfamiliar to anyone who has worked with vector graphics. SVG, canvas, PostScript, and turtle graphics all represent shapes as sequences of directed commands — move, line, curve, arc — rather than as lists of points. These are instructions that generate a path. The shape is the trajectory of the process.
 
-These formats were designed to solve a practical problem — how to represent geometry compactly for computation and rendering — and they independently arrived at the same answer: process-based description. The convergence across unrelated systems suggests the approach is tracking something real, not merely a convenient representation. The framework here can be understood as making that implicit foundation explicit.
+These formats were designed to solve a practical problem — how to represent geometry compactly for computation and rendering — and they independently arrived at the same answer: process-based description. The convergence across unrelated systems suggests the approach is tracking something real, not merely a convenient representation. The framework here can be understood as making that implicit structure explicit.
 
 ---
 
@@ -85,7 +85,7 @@ This makes explicit something that is often left implicit: a smooth gradual curv
 
 A shape defined by d, θ, and δ(n) has no position. The rule describes how steps relate to each other — their relative directions and distances — but says nothing about where the sequence begins. Placement must come from outside.
 
-This separates what a shape *is* from where it *is placed* — a distinction classical geometry knows informally as congruence, but does not enforce at the foundational level because coordinates are built in from the start.
+This separates what a shape *is* from where it *is placed* — a distinction classical geometry knows informally as congruence, but does not enforce by default because coordinates are built in from the start.
 
 The practical consequence is that the starting anchor is not a geometric primitive. It functions as a reference label — wherever the containing context decides to begin — not as an object with independent structure. This removes the need to treat points as foundational. The point problem that Euclid introduced with "that which has no part" simply does not arise in this construction. Not because it is resolved, but because the construction never required it.
 

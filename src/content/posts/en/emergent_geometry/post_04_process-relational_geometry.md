@@ -35,7 +35,7 @@ pattern — three equal turns that close — is the triangle's identity.
 Everything else is context.
 
 The framework developed in these posts takes that observation seriously
-as a foundation. Instead of starting with space and placing objects
+as a starting point. Instead of starting with space and placing objects
 inside it, it starts with elementary moves and asks what objects emerge
 from the rules that govern them.
 
@@ -48,7 +48,7 @@ produce a different result. Everything that passes that test of
 indistinguishability gets grouped together. Those groups are your
 geometric objects.
 
-No space required. No coordinates. No infinite processes. Just moves,
+No background space. No coordinates. No infinite primitives. Just moves,
 rules, and the grouping that results.
 
 The circle is the cleanest example. Take one basic move — one step
@@ -61,7 +61,7 @@ divisibility, no ambient plane. Just one rule.
 Changing the rule produces a different object. The same step with a
 different return distance gives a different circle. Adding a second
 independent move with its own return rule gives a torus. Letting the
-two moves interfere with each other rather than commute gives curvature.
+two moves interfere with each other rather than commute produces a different kind of geometric structure — one whose shape depends on how the generators interact.
 The geometry lives entirely in the choice of rules.
 
 The formal mathematics makes this precise in a way that is worth
@@ -69,8 +69,9 @@ stating: for the broadest class of systems this framework covers, every
 finite metric space — every way of measuring distances between a finite
 collection of points — can be expressed as such a system of moves and
 rules, and the correspondence is exact. The claim that geometry is in
-the choice of rules is not just a philosophical position. It is a proved
-result.
+the choice of rules is not just a philosophical
+position — it has a precise mathematical counterpart. The philosophical
+interpretation is my own, but it is grounded in that structure.
 
 ---
 
@@ -81,13 +82,14 @@ treats as intrinsic to geometric objects become visibly external — or
 more precisely, become visible as consequences of the relations between
 objects rather than properties of the objects themselves.
 
-They build on each other in a specific order. The way of measuring
-distance is most fundamental. Size is that measurement applied with a
-chosen unit — same way of measuring, different unit, different size.
+One way to see their relationship: the way of measuring distance is
+most fundamental. Size is that measurement applied with a chosen unit.
 Position requires a measuring rule plus a chosen reference point and
 orientation. And space — the most surprising of the four — turns out
 not to be a container at all, but the structure that emerges when
-objects are connected to each other by relations.
+objects are connected to each other by relations. This ordering is my
+reading of what the framework reveals, not a claim the framework
+itself proves.
 
 A coordinate system delivers all four simultaneously, which is why
 their distinctness is so easy to miss. They are not part of what an
@@ -111,11 +113,12 @@ context of measurement, not to the object being measured.
 **Distance.** The way of measuring how far apart two things are is not
 fixed by the move-and-rule structure. Assigning different costs to
 different moves produces different distance measures over the same
-underlying structure. The Euclidean way of measuring distance is one
-choice among many — not the natural or necessary one. Its apparent
-necessity is an artifact of the particular physical experience that
-shaped classical geometry. Any specific way of measuring distance can
-be expressed within this framework, but the expression always reflects
+underlying structure. The Euclidean way of measuring distance is one choice among many. Its
+familiarity has deep roots — both in physical experience and in the
+mathematical properties of continuous space — but within a finite
+relational system, it is a contextual assignment, not something the
+structure demands. Any specific way of measuring distance can be
+expressed within this framework, but the expression always reflects
 a contextual choice. The framework makes that choice explicit rather
 than concealing it inside the definition of the object.
 
@@ -140,19 +143,18 @@ rather than assumed in advance, no particular geometry is privileged.
 The result is not required to be Euclidean — flat, infinite, organized
 along three perpendicular axes. It is not required to be any specific
 shape at all. Depending on how the connecting relations are structured,
-the combined space can be flat or curved, product-like or warped,
-connected or fragmented. The framework does not impose a predetermined
+the combined space can take very different shapes — product-like or
+intertwined, connected or fragmented. The framework does not impose a predetermined
 geometry and then ask what fits inside it. It derives the geometry from
 the interactions and asks what emerges.
 
-This is a more radical departure from classical geometry than simply
-allowing curved spaces. Non-Euclidean geometries are well established
-within classical mathematics — you can choose hyperbolic or spherical
-geometry and work in it perfectly well. But even those choices still
-impose a shape before the objects appear. What the relational framework
-removes is the imposition itself. The shape of space is a consequence
-of the relations between objects. Without those relations, there is
-no shape to impose.
+Non-Euclidean geometries are well established within classical
+mathematics — you can choose hyperbolic or spherical geometry and work
+in it perfectly well. But even those choices still assume a background
+space. In the relational framework, the shape of space is derived from
+the connecting relations between objects, not assumed in advance. That
+is a different organizational choice — one the framework makes explicit
+for the discrete metric setting it covers.
 
 ---
 
@@ -168,11 +170,11 @@ it are two descriptions of the same thing. Knowing the rule completely
 determines the object. Knowing the object completely determines the
 rule. They are the same information expressed two different ways.
 
-The formal mathematics confirms this — the framework turns out to be
-exactly equivalent, as a mathematical structure, to the entire domain
-of finite geometry with distances. Every finite metric space corresponds
-to a system of rules, and every system of rules corresponds to a finite
-metric space. The two are the same thing seen from different angles.
+The formal mathematics confirms a precise version of this: every finite
+metric space corresponds to a system of rules, and every system of rules
+corresponds to a finite metric space. The two are the same thing seen
+from different angles — at least within the domain of finite metric
+geometry, which is what the framework covers.
 
 One further consequence: the complexity of an object is exactly the
 complexity of its rule. A simple rule — one move, one law — produces
@@ -183,29 +185,27 @@ simplicity all the way through.
 
 ---
 
-## IV. What This Unifies
+## IV. What This Connects
 
-Classical geometry is a family of theories — Euclidean, hyperbolic,
-spherical, projective — presented as fundamentally separate, each with
-its own axioms and primitives. In this framework they are not separate.
-They are the same kind of object, built the same way, but with different
-choices of rules and measuring conventions.
+Classical geometry describes several curvature types — flat, hyperbolic,
+spherical — each typically presented with its own axioms and background
+space. In this framework, their discrete analogues are not separate kinds
+of objects. They are the same construction with different rule choices.
 
-The framework demonstrates this across the three curvature types.
 A system with one basic move and no return rule, where paths branch
 outward, produces a structure whose volume grows exponentially with
-distance — the signature of negative curvature, the geometry of
-hyperbolic space. Two independent moves with their own return rules
-produce a flat structure where paths that go out always come back to
-where they started. A finite approximation of a sphere produces a
-structure where paths that spread apart eventually reconverge — positive
-curvature. All three from the same framework. The difference is not the
-kind of object but the choice of rules.
+distance — the signature of negative curvature. Two independent moves
+with their own return rules produce a flat structure where paths that go
+out always come back to where they started. A finite approximation of
+positive curvature produces paths that spread apart and then reconverge.
+All three from the same construction. The difference is the rule, not
+the kind of object.
 
-This is not unification by finding a grander theory that contains all
-the classical ones as special cases — that would just add more
-complexity. It is unification by removing the contextual layers that
-made them appear different in the first place.
+This does not subsume the full classical theories. What it shows is that
+curvature type is a consequence of rule structure, not a property assumed
+in advance. Within the discrete metric setting the framework covers, the
+difference between these geometries is a difference of presentation,
+not of kind.
 
 ---
 
@@ -322,6 +322,5 @@ we are still in the process of making, is its own kind of discovery.
 
 ---
 
-*The formal mathematical development behind these ideas — including
-complete proofs — is in the companion paper:
-A Process-Relational Foundation for Geometry.*
+*The formal mathematical development behind these ideas is being developed
+in a companion paper currently in progress.*

@@ -37,17 +37,19 @@ rule. The receiver reconstructs the geometry by running it.
 
 The rule for a circle of a million steps is exactly as long as the
 rule for a circle of six. The geometry scales without limit; the
-description does not. This is compression — not as an analogy but as
-the actual structure of the thing.
+description does not. This is compression in a structural sense — the rule does not grow as
+the geometry does. Whether that parallel extends to a precise connection
+with information-theoretic notions of complexity is a question the
+framework raises but has not yet resolved.
 
 Every geometric space has a smallest description — one with no
 redundant rules, where removing any single rule would change the
 geometry. The complexity of a shape, in this framework, is the length
-of that minimal description. A circle is simple: one rule. A torus
-slightly more complex: three. A shape with no underlying pattern
+of that minimal description. A circle is simple: one rule. A torus requires more — a second
+generator and the rules governing how the two relate. A shape with no underlying pattern
 requires a description as long as itself — it cannot be compressed
 because there is nothing to compress. The framework makes that
-distinction precise for the first time in geometric terms.
+distinction precise in its own geometric terms.
 
 ---
 
@@ -57,12 +59,14 @@ A computer network is nodes connected by weighted links. A message
 finds its destination by the cheapest path. Some connections are
 redundant and can be removed without affecting reachability.
 
-This is exactly the relational framework. Not metaphorically. The same
-mathematical structure, the same theorems, the same questions.
+This is not a metaphor — the structural correspondence is direct. Some
+results transfer immediately; others require more work to establish.
+The questions the two domains ask of their structures are recognizably
+the same.
 
 The result that a cost function on a relational system produces a
-distance measure is a statement about routing. The minimal description
-theorem is a statement about redundancy elimination. The question of
+distance measure is a statement about routing. The result about minimal descriptions is a statement about redundancy
+elimination. The question of
 when two different network configurations produce the same routing
 behavior is a live engineering problem the framework gives tools to
 approach formally.
@@ -90,70 +94,63 @@ description gives a canonical form.
 
 The connection runs in both directions. Procedural generation has been
 developing the intuition that shapes are rules for decades. The
-framework provides the mathematical foundation those intuitions were
-pointing toward.
+framework gives those intuitions a precise mathematical form.
 
 ---
 
 ## A Hundred Years of Free Mathematics
 
-Here is the one that is genuinely surprising, at least to me.
+Here is the one that was genuinely surprising to me — though I suspect
+it will not surprise anyone already working in the area.
 
 When the relational framework is expressed in its full mathematical
 form, a connection becomes visible: the distances the framework
 produces turn out to be the same as the distances studied in geometric
 group theory — a field that has been active for over a century,
 studying how algebraic structures can be understood through the
-geometry of the spaces they generate.
+geometry of the spaces they generate. I am still learning this
+territory. What I can say is that the connection was not planned.
 
 The framework arrived there not by borrowing from it deliberately, not
 by recognizing the connection in advance, but by following the logic
 of the definitions until it landed somewhere that already had a name.
-That entire body of knowledge — curvature, growth rates, geodesics,
-large-scale geometric structure — now applies directly to relational
-systems. Not as an approximation. Not as an analogy. As the same
-objects.
 
-The inheritance is immediate. It does not need to be constructed. It
-was already there, waiting to be recognized.
+To the extent the connection holds — and I am still working out how
+far it goes — that body of knowledge may apply directly to relational
+systems. The distances the framework produces are formally the same as
+word metrics in geometric group theory. What that makes available, and
+what requires further work to establish, are questions I am still
+inside.
 
 ---
 
 ## Where the Thread Continues
 
-The further the framework is developed, the closer it gets to
-something unexpected: the foundations of physics.
+The clearest next step is also the most internal to the framework itself.
 
-Here is why. The framework measures curvature by how much a loop
-fails to close — traverse a small path and return to where you
-started, and the residual difference is the curvature. This turns out
-to be precisely the mathematical structure at the heart of gauge
-theory, the framework that describes electromagnetism, the strong and
-weak nuclear forces, and — through general relativity — gravity.
+The framework naturally produces two ways of measuring distance. One
+measures the cost of getting from one state to another — how many steps,
+how much weight. The other measures the distance between entire
+processes — how different two sequences of moves are from each other.
+Both are real, both are useful, but the precise relationship between
+them has not yet been formally established. Closing that gap is the
+work currently in progress. It requires mathematical tools the author
+is still learning.
 
-In gauge theory, curvature is also measured by how much a loop fails
-to return to its starting state. The mathematics is the same
-operation, in a more general setting. Following this thread leads to
-a natural question: can the Einstein field equations — the equations
-that govern how matter curves spacetime in general relativity — be
-derived from relational structure rather than assumed as the starting
-point?
-
-This is speculative. It is the direction a second paper would explore,
-not a result of this one. But the structural parallel is not a
-metaphor: it follows from the definitions. The framework was built to
-fix a foundational problem in discrete geometry. It ended up pointing,
-through its own internal logic, toward the deepest equations in
-physics. Whether that pointing leads somewhere — whether the relational
-structure can actually carry the full weight of gravitational geometry
-— is the open question the framework leaves behind.
+Further out, there is a structural parallel with the way physics
+measures curvature — both involve asking how much a loop fails to
+return to where it started. That parallel is suggestive and worth
+eventually following. But it belongs on the horizon, not on the
+immediate path. The next concrete step is the one closer in: understanding
+exactly how the two distance measures relate to each other, and what
+that relationship reveals about the framework's deeper structure.
 
 ---
 
 ## The Right Posture
 
-What the previous four posts built was a foundation. What this post
-describes are the things that foundation opened without being asked
+What the previous four posts developed was a framework. What this post
+describes are the things that framework opened without being asked
 to — a compression theory, a language for networks, a formalization
 of generative rules, a bridge to a century of existing mathematics,
 and a thread pointing toward physics.
@@ -165,13 +162,15 @@ The honest posture is to hold them at different levels of confidence.
 
 What they have in common is that none of them were part of the
 original question. The framework was built to fix a foundational
-problem in geometry. It did that. Then it kept going.
+problem in geometry. Whether it succeeds at that, and whether any
+of these connections lead somewhere real, are questions still being
+worked through.
 
-That is what interesting mathematics does. It opens more than it was
-asked to. The framework has that quality. That is worth noticing.
+That uncertainty is where the thinking currently stands. It is not
+a finished map — it is a direction. If any of it resonates or opens
+a question worth pursuing, that is exactly what this series was for.
 
 ---
 
-*The formal mathematical development — complete proofs and precise
-definitions — is in the companion paper:
-A Process-Relational Foundation for Geometry.*
+*The formal mathematical development behind these ideas is being developed
+in a companion paper currently in progress.*

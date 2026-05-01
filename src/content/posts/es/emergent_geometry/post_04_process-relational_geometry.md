@@ -20,18 +20,20 @@ Esta publicación explica qué es realmente ese marco, qué logra y qué sugiere
 Considera un triángulo.  Probablemente lo pienses como tres puntos conectados por líneas — algo que se encuentra en algún lugar del espacio con coordenadas específicas, un tamaño específico, una orientación específica.  La geometría clásica lo define así.  Pero despoja todo eso —las coordenadas, el tamaño, la ubicación— y algo aún permanece.  Un triángulo son tres pasos iguales, cada uno girando por el mismo ángulo, volviendo a cerrarse donde comenzó.  Ese patrón —tres giros iguales que se cierran— es la identidad del triángulo.
 Todo lo demás es contexto.
 
-El marco desarrollado en estas publicaciones toma esa observación en serio como base.  En lugar de empezar con el espacio y colocar objetos dentro de él, empieza con movimientos elementales y pregunta qué objetos surgen de las reglas que los rigen.
+El marco desarrollado en estas publicaciones toma esa observación en serio como punto de partida.  En lugar de empezar con el espacio y colocar objetos dentro de él, empieza con movimientos elementales y pregunta qué objetos surgen de las reglas que los rigen.
 
 El procedimiento es este.  Tienes un pequeño conjunto de movimientos básicos — piénsalo como las operaciones primitivas disponibles en el sistema, como pasos en una dirección particular.  Construyes secuencias de esos movimientos, componiéndolos uno tras otro.  Luego declaras una regla para cuándo dos secuencias cuentan como la misma: cuando ningún movimiento adicional que pudieras agregar a una u otra produciría un resultado diferente.  Todo lo que pasa esa prueba de indistinguibilidad se agrupa.  Esos grupos son tus objetos geométricos.
 
-No se requiere espacio.  Sin coordenadas.  No procesos infinitos.  Solo movimientos, reglas y la agrupación que resulta.
+Sin espacio de fondo.  Sin coordenadas.  Sin primitivas infinitas.  Solo movimientos, reglas y la agrupación que resulta.
 
 El círculo es el ejemplo más limpio.  Toma un movimiento básico —un paso adelante— e impón una regla: después de un cierto número de pasos, regresas a donde empezaste.  Esa única regla es todo el contenido geométrico del círculo.  Los objetos que produce son posiciones dispuestas en un ciclo, cada una a un paso de la siguiente.  Sin arco, sin divisibilidad infinita, sin plano ambiente.  Solo una regla.
 
-Cambiar la regla produce un objeto diferente.  El mismo paso con una distancia de retorno diferente da un círculo diferente.  Añadir un segundo movimiento independiente con su propia regla de retorno da como resultado un toro.  Dejar que los dos movimientos interfieran entre sí en lugar de conmutar da curvatura.
+Cambiar la regla produce un objeto diferente.  El mismo paso con una distancia de retorno diferente da un círculo diferente.  Añadir un segundo movimiento independiente con su propia regla de retorno da como resultado un toro.  Dejar que los dos movimientos interfieran entre sí en lugar de conmutar produce un tipo diferente de estructura geométrica — una cuya forma depende de cómo interactúan los generadores.
 La geometría reside enteramente en la elección de las reglas.
 
-Las matemáticas formales precisan esto de una manera que vale la pena enunciar: para la clase más amplia de sistemas que abarca este marco, cada espacio métrico finito —cada forma de medir distancias entre una colección finita de puntos— puede expresarse como tal sistema de movimientos y reglas, y la correspondencia es exacta.  La afirmación de que la geometría está en la elección de las reglas no es solo una posición filosófica.  Es un resultado probado.
+Las matemáticas formales precisan esto de una manera que vale la pena enunciar: para la clase más amplia de sistemas que abarca este marco, cada espacio métrico finito —cada forma de medir distancias entre una colección finita de puntos— puede expresarse como tal sistema de movimientos y reglas, y la correspondencia es exacta.  La afirmación de que la geometría está en la elección de las reglas no es
+solo una posición filosófica — tiene un correlato matemático preciso.  La interpretación filosófica es mía,
+pero está fundamentada en esa estructura.
 
 ---
 
@@ -39,8 +41,8 @@ Las matemáticas formales precisan esto de una manera que vale la pena enunciar:
 
 Una vez que este marco está en su lugar, cuatro propiedades que la geometría clásica trata como intrínsecas a los objetos geométricos se vuelven visiblemente externas — o, más precisamente, se vuelven visibles como consecuencias de las relaciones entre los objetos en lugar de propiedades de los propios objetos.
 
-Se basan unos en otros en un orden específico.  La forma de medir la distancia es la más fundamental.  El tamaño es esa medición aplicada con una unidad elegida: la misma forma de medir, diferente unidad, diferente tamaño.
-La posición requiere una regla de medición más un punto de referencia y orientación elegidos.  Y el espacio —el más sorprendente de los cuatro— resulta no ser un contenedor en absoluto, sino la estructura que emerge cuando los objetos están conectados entre sí por relaciones.
+Una forma de ver su relación: la forma de medir la distancia es la más fundamental.  El tamaño es esa medición aplicada con una unidad elegida.
+La posición requiere una regla de medición más un punto de referencia y orientación elegidos.  Y el espacio —el más sorprendente de los cuatro— resulta no ser un contenedor en absoluto, sino la estructura que emerge cuando los objetos están conectados entre sí por relaciones.  Este orden es mi lectura de lo que revela el marco, no una afirmación que el marco mismo prueba.
 
 Un sistema de coordenadas entrega los cuatro simultáneamente, por eso es tan fácil pasar por alto su distinción.  No son parte de lo que es un objeto.  Son parte de cómo los objetos se relacionan entre sí y con su contexto.
 
@@ -49,7 +51,7 @@ Este marco los separa por construcción: la regla define el objeto, el contexto 
 
 Tamaño.  Un círculo definido por regresar después de seis pasos y uno definido por regresar después de seiscientos pasos son el mismo objeto a diferentes resoluciones.  El número de pasos no es intrínseco, es la relación entre la circunferencia y el tamaño del paso.  Cambia el tamaño del paso y el conteo cambia; el círculo no.  El tamaño pertenece al contexto de la medición, no al objeto que se está midiendo.
 
-Distancia.  La forma de medir la distancia entre dos cosas no está fijada por la estructura de mover y medir.  Asignar diferentes costos a diferentes movimientos produce diferentes medidas de distancia sobre la misma estructura subyacente.  La forma euclidiana de medir la distancia es una opción entre muchas, no la natural ni la necesaria.  Su aparente necesidad es un artefacto de la experiencia física particular que moldeó la geometría clásica.  Cualquier forma específica de medir la distancia puede expresarse dentro de este marco, pero la expresión siempre refleja una elección contextual.  El marco hace explícita esa elección en lugar de ocultarla dentro de la definición del objeto.
+Distancia.  La forma de medir la distancia entre dos cosas no está fijada por la estructura de mover y medir.  Asignar diferentes costos a diferentes movimientos produce diferentes medidas de distancia sobre la misma estructura subyacente.  La forma euclidiana de medir la distancia es una opción entre muchas.  Su familiaridad tiene raíces profundas — tanto en la experiencia física como en las propiedades matemáticas del espacio continuo — pero dentro de un sistema relacional finito, es una asignación contextual, no algo que la estructura exija.  Cualquier forma específica de medir la distancia puede expresarse dentro de este marco, pero la expresión siempre refleja una elección contextual.  El marco hace explícita esa elección en lugar de ocultarla dentro de la definición del objeto.
 
 Espacio.  Cuando dos objetos definidos por sus propias reglas están conectados por relaciones entre ellos —enlaces con distancias asociadas—, la estructura combinada produce un espacio.  Ese espacio está totalmente determinado por las reglas internas de cada objeto y las relaciones de conexión entre ellos.
 No se requiere ni se asume espacio de fondo.  El espacio no es el contenedor en el que se encuentran los objetos.  Es la estructura relacional la que los conecta, producida por esas conexiones, que no pertenece a ninguno de los objetos por sí sola.
@@ -57,9 +59,9 @@ No se requiere ni se asume espacio de fondo.  El espacio no es el contenedor en 
 Mover un objeto en relación con otro significa cambiar las relaciones de conexión, no cambiar ninguno de los dos objetos.  Dos objetos sin relaciones de conexión no tienen ninguna relación espacial, no una gran distancia, sino ninguna distancia en absoluto.  El espacio entre ellos no existe hasta que se especifican las conexiones.  Esta es la versión formal de la afirmación central de la serie: el espacio no es un escenario en el que ocurre la geometría.  Surge de la geometría.
 
 Y como la forma del espacio se deriva de las conexiones en lugar de asumirse de antemano, ninguna geometría particular es privilegiada.
-El resultado no tiene que ser euclidiano — plano, infinito, organizado a lo largo de tres ejes perpendiculares.  No es necesario que tenga ninguna forma específica.  Dependiendo de cómo se estructuren las relaciones de conexión, el espacio combinado puede ser plano o curvo, similar a un producto o deformado, conectado o fragmentado.  El marco no impone una geometría predeterminada y luego pregunta qué cabe dentro de ella.  Deriva la geometría de las interacciones y pregunta qué emerge.
+El resultado no tiene que ser euclidiano — plano, infinito, organizado a lo largo de tres ejes perpendiculares.  No es necesario que tenga ninguna forma específica.  Dependiendo de cómo se estructuren las relaciones de conexión, el espacio combinado puede tomar formas muy diferentes — similar a un producto o entrelazado, conectado o fragmentado.  El marco no impone una geometría predeterminada y luego pregunta qué cabe dentro de ella.  Deriva la geometría de las interacciones y pregunta qué emerge.
 
-Esta es una desviación más radical de la geometría clásica que simplemente permitir espacios curvos.  Las geometrías no euclidianas están bien establecidas dentro de las matemáticas clásicas: puedes elegir geometría hiperbólica o esférica y trabajar en ella perfectamente bien.  Pero incluso esas elecciones aún imponen una forma antes de que aparezcan los objetos.  Lo que el marco relacional elimina es la imposición en sí misma.  La forma del espacio es una consecuencia de las relaciones entre los objetos.  Sin esas relaciones, no hay forma de imponer.
+Las geometrías no euclidianas están bien establecidas dentro de las matemáticas clásicas: puedes elegir geometría hiperbólica o esférica y trabajar en ella perfectamente bien.  Pero incluso esas elecciones aún asumen un espacio de fondo.  En el marco relacional, la forma del espacio se deriva de las relaciones de conexión entre objetos, no se asume de antemano.  Esa es una elección organizativa diferente — una que el marco hace explícita para el contexto de geometría métrica discreta que cubre.
 
 ---
 
@@ -69,21 +71,23 @@ Una vez que la distancia, el tamaño, la posición y el espacio se entienden com
 
 Esto tiene una consecuencia sorprendente.  El objeto y la regla que lo define son dos descripciones de la misma cosa.  Conocer la regla completamente determina el objeto.  Conocer el objeto completamente determina la regla.  Es la misma información expresada de dos maneras diferentes.
 
-Las matemáticas formales confirman esto: el marco resulta ser exactamente equivalente, como estructura matemática, a todo el dominio de la geometría finita con distancias.  Todo espacio métrico finito corresponde a un sistema de reglas, y todo sistema de reglas corresponde a un espacio métrico finito.  Las dos son lo mismo visto desde diferentes ángulos.
+Las matemáticas formales confirman una versión precisa de esto: todo
+espacio métrico finito corresponde a un sistema de reglas, y todo sistema
+de reglas corresponde a un espacio métrico finito.  Las dos son lo mismo
+visto desde diferentes ángulos — al menos dentro del dominio de la
+geometría métrica finita, que es lo que el marco cubre.
 
 Una consecuencia más: la complejidad de un objeto es exactamente la complejidad de su regla.  Una regla simple —un movimiento, una ley— produce un objeto simple.  Una regla compleja produce un objeto complejo.  No hay complejidad geométrica oculta que la regla pase por alto, ni complejidad en la regla que no corresponda a algo geométrico.  La simplicidad es simplicidad en todo momento.
 
 ---
 
-## IV. Lo que esto unifica
+## IV. Lo que esto conecta
 
-La geometría clásica es una familia de teorías —euclidiana, hiperbólica, esférica, proyectiva— presentadas como fundamentalmente separadas, cada una con sus propios axiomas y primitivas.  En este marco no están separadas.
-Son el mismo tipo de objeto, construido de la misma manera, pero con diferentes opciones de reglas y convenciones de medición.
+La geometría clásica describe varios tipos de curvatura —plana, hiperbólica, esférica— cada uno presentado típicamente con sus propios axiomas y espacio de fondo.  En este marco, sus análogos discretos no son tipos de objetos separados.  Son la misma construcción con diferentes opciones de reglas.
 
-El marco demuestra esto a través de los tres tipos de curvatura.
-Un sistema con un movimiento básico y sin regla de retorno, donde los caminos se ramifican hacia afuera, produce una estructura cuyo volumen crece exponencialmente con la distancia, la firma de la curvatura negativa, la geometría del espacio hiperbólico.  Dos movimientos independientes con sus propias reglas de retorno producen una estructura plana donde los caminos que salen siempre vuelven al punto de partida.  Una aproximación finita de una esfera produce una estructura donde los caminos que se separan eventualmente convergen de nuevo — curvatura positiva.  Los tres del mismo marco.  La diferencia no es el tipo de objeto sino la elección de reglas.
+Un sistema con un movimiento básico y sin regla de retorno, donde los caminos se ramifican hacia afuera, produce una estructura cuyo volumen crece exponencialmente con la distancia — la firma de la curvatura negativa.  Dos movimientos independientes con sus propias reglas de retorno producen una estructura plana donde los caminos que salen siempre vuelven al punto de partida.  Una aproximación finita de curvatura positiva produce caminos que se separan y luego vuelven a converger.  Los tres de la misma construcción.  La diferencia es la regla, no el tipo de objeto.
 
-Esta no es la unificación mediante la búsqueda de una teoría más grandiosa que contenga todas las clásicas como casos especiales — eso solo añadiría más complejidad.  Es la unificación eliminando las capas contextuales que los hacían parecer diferentes en primer lugar.
+Esto no subsume las teorías clásicas completas.  Lo que muestra es que el tipo de curvatura es una consecuencia de la estructura de las reglas, no una propiedad asumida de antemano.  Dentro del contexto de geometría métrica discreta que cubre el marco, la diferencia entre estas geometrías es una diferencia de presentación, no de tipo.
 
 ---
 
@@ -136,5 +140,5 @@ Este marco no ofrece sabiduría.  Le da a la siguiente persona una visión más 
 
 ---
 
-El desarrollo matemático formal detrás de estas ideas, incluyendo pruebas completas, se encuentra en el artículo complementario:
-Una base procesual-relacional para la geometría.*
+*El desarrollo matemático formal detrás de estas ideas está siendo desarrollado
+en un artículo complementario actualmente en progreso.*
