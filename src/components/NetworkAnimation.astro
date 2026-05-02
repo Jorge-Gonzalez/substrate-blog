@@ -1,13 +1,170 @@
-<canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+<div class="animation-container">
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+  
+  <div class="controls reveal" id="controls">
+    <button class="controls-toggle" id="controlsToggle" aria-label="Toggle controls">
+      <span class="controls-icon">⚙</span>
+      <span class="controls-label">Parameters</span>
+    </button>
+    
+    <div class="controls-panel">
+      <div class="control-group">
+        <label>
+          Nodes: <span id="valNodes">55</span>
+          <input type="range" id="rangeNodes" min="10" max="120" value="55" step="1" />
+        </label>
+      </div>
+      <div class="control-group">
+        <label>
+          Repel: <span id="valRepel">3000</span>
+          <input type="range" id="rangeRepel" min="500" max="8000" value="3000" step="100" />
+        </label>
+      </div>
+      <div class="control-group">
+        <label>
+          Stiffness: <span id="valSpring">0.012</span>
+          <input type="range" id="rangeSpring" min="0.001" max="0.040" value="0.012" step="0.001" />
+        </label>
+      </div>
+      <div class="control-group">
+        <label>
+          Speed: <span id="valSpeed">500</span>ms
+          <input type="range" id="rangeSpeed" min="100" max="2000" value="500" step="50" />
+        </label>
+      </div>
+      <div class="control-group">
+        <label>
+          Gravity: <span id="valGravity">0.001</span>
+          <input type="range" id="rangeGravity" min="0" max="0.005" value="0.001" step="0.0001" />
+        </label>
+      </div>
+      <button class="controls-reset" id="controlsReset">Reset to Defaults</button>
+    </div>
+  </div>
+</div>
 
 <style>
+  .animation-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
   .hero-canvas {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none;
     z-index: 0;
+  }
+  .controls {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 2rem;
+    z-index: 10;
+    pointer-events: auto;
+  }
+  .controls-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: all var(--transition);
+  }
+  .controls-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .controls-panel {
+    position: absolute;
+    bottom: calc(100% + 1rem);
+    left: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+  }
+  .controls.open .controls-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .control-group {
+    margin-bottom: 1rem;
+  }
+  .control-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .control-group label span {
+    color: var(--accent);
+    float: right;
+  }
+  .control-group input {
+    width: 100%;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    accent-color: var(--accent);
+  }
+  .controls-reset {
+    width: 100%;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .controls-reset:hover {
+    border-color: var(--accent-dim);
+    color: var(--accent);
+    background: var(--bg-hover);
+  }
+
+  @media (max-width: 768px) {
+    .controls {
+      bottom: auto;
+      top: 5rem;
+      left: 1.25rem;
+    }
+    .controls-panel {
+      bottom: auto;
+      top: calc(100% + 0.5rem);
+    }
+    .controls-label {
+      display: none;
+    }
+    .controls-toggle {
+      padding: 0.4rem;
+      width: 2rem;
+      height: 2rem;
+      justify-content: center;
+    }
   }
 </style>
 
@@ -31,26 +188,105 @@
       attributes: true, attributeFilter: ['data-theme', 'class']
     })
 
-    const N_TARGET   = 55
-    const N_MAX      = 68
-    const N_MIN      = 20
+    // --- Dynamic Parameters ---
+    const DEFAULTS = {
+      nodes: 55,
+      repel: 3000,
+      spring: 0.012,
+      speed: 500,
+      gravity: 0.001
+    }
+
+    let N_TARGET   = DEFAULTS.nodes
+    let N_MAX      = 68
+    let N_MIN      = 20
+    let REPEL      = DEFAULTS.repel
+    let SPRING     = DEFAULTS.spring
+    let STEP_MS    = DEFAULTS.speed
+    let GRAVITY    = DEFAULTS.gravity
+    
+    const MARGIN     = 100
     const K          = 5
     const FADE       = 0.05
-    const STEP_MS    = 500
     const PERTURB_MS = 8000
-    const REPEL      = 3000
     const REST       = 130
     const REST_ALV   = 80
-    const SPRING     = 0.012
     const DAMP       = 0.86
     const MAX_V      = 2.2
-    const MARGIN     = 60
     const DEATH_STEPS = 7
     const P_SPAWN    = 0.4
+
+    function updateLimits() {
+      N_MAX = Math.floor(N_TARGET * 1.25)
+      N_MIN = Math.floor(N_TARGET * 0.4)
+    }
+
+    // --- UI Logic ---
+    const controls = document.getElementById('controls')
+    const toggle = document.getElementById('controlsToggle')
+    const resetBtn = document.getElementById('controlsReset')
+    
+    toggle?.addEventListener('click', () => controls?.classList.toggle('open'))
+
+    const inputs: Record<string, HTMLInputElement> = {
+      nodes: document.getElementById('rangeNodes') as HTMLInputElement,
+      repel: document.getElementById('rangeRepel') as HTMLInputElement,
+      spring: document.getElementById('rangeSpring') as HTMLInputElement,
+      speed: document.getElementById('rangeSpeed') as HTMLInputElement,
+      gravity: document.getElementById('rangeGravity') as HTMLInputElement
+    }
+    const displays: Record<string, HTMLElement> = {
+      nodes: document.getElementById('valNodes')!,
+      repel: document.getElementById('valRepel')!,
+      spring: document.getElementById('valSpring')!,
+      speed: document.getElementById('valSpeed')!,
+      gravity: document.getElementById('valGravity')!
+    }
+
+    const updateUI = () => {
+      inputs.nodes.value = N_TARGET.toString()
+      inputs.repel.value = REPEL.toString()
+      inputs.spring.value = SPRING.toString()
+      inputs.speed.value = STEP_MS.toString()
+      inputs.gravity.value = GRAVITY.toString()
+      
+      displays.nodes.textContent = N_TARGET.toString()
+      displays.repel.textContent = REPEL.toString()
+      displays.spring.textContent = SPRING.toString()
+      displays.speed.textContent = STEP_MS.toString()
+      displays.gravity.textContent = GRAVITY.toString()
+    }
+
+    inputs.nodes.addEventListener('input', () => { 
+      N_TARGET = parseFloat(inputs.nodes.value)
+      displays.nodes.textContent = inputs.nodes.value
+      updateLimits()
+      checkLifecycle() // Immediate adjustment
+    })
+    inputs.repel.addEventListener('input', () => { REPEL = parseFloat(inputs.repel.value); displays.repel.textContent = inputs.repel.value })
+    inputs.spring.addEventListener('input', () => { SPRING = parseFloat(inputs.spring.value); displays.spring.textContent = inputs.spring.value })
+    inputs.speed.addEventListener('input', () => { STEP_MS = parseFloat(inputs.speed.value); displays.speed.textContent = inputs.speed.value })
+    inputs.gravity.addEventListener('input', () => { GRAVITY = parseFloat(inputs.gravity.value); displays.gravity.textContent = inputs.gravity.value })
+
+    resetBtn?.addEventListener('click', () => {
+      N_TARGET = DEFAULTS.nodes
+      REPEL = DEFAULTS.repel
+      SPRING = DEFAULTS.spring
+      STEP_MS = DEFAULTS.speed
+      GRAVITY = DEFAULTS.gravity
+      updateLimits()
+      updateUI()
+    })
+
+    updateLimits()
+    updateUI()
+
+    // --- Simulation ---
 
     type Node = {
       x: number; y: number; vx: number; vy: number
       state: number; alpha: number; ripple: number; deadSteps: number
+      targetState: number; stateDelay: number
     }
     let nodes: Node[] = []
     let adj:   number[][] = []
@@ -77,15 +313,20 @@
     }
 
     function build() {
-      nodes = Array.from({ length: N_TARGET }, () => ({
-        x:         Math.random() * canvas.width,
-        y:         Math.random() * canvas.height,
-        vx: 0,     vy: 0,
-        state:     Math.random() < 0.32 ? 1 : 0,
-        alpha:     0,
-        ripple:    0,
-        deadSteps: 0,
-      }))
+      nodes = Array.from({ length: N_TARGET }, () => {
+        const s = Math.random() < 0.32 ? 1 : 0
+        return {
+          x:         Math.random() * canvas.width,
+          y:         Math.random() * canvas.height,
+          vx: 0,     vy: 0,
+          state:     s,
+          targetState: s,
+          stateDelay: 0,
+          alpha:     0,
+          ripple:    0,
+          deadSteps: 0,
+        }
+      })
       rebuildConnections()
       for (const n of nodes) n.alpha = n.state
     }
@@ -124,7 +365,6 @@
       }
       const centerX = canvas.width / 2
       const centerY = canvas.height / 2
-      const GRAVITY = 0.001 // Subtle pull to keep the cluster centered
 
       for (const n of nodes) {
         // Subtle central gravity
@@ -152,6 +392,32 @@
 
     function checkLifecycle() {
       let changed = false
+      
+      // Aggressive removal if over N_MAX
+      while (nodes.length > N_MAX) {
+        // Find the "weakest" node to remove:
+        // 1. Prefer nodes that are already state 0
+        // 2. Among those, or if all are state 1, find the one with lowest alpha
+        let weakestIdx = -1
+        let minAlpha = 2
+        
+        for (let i = 0; i < nodes.length; i++) {
+          const score = nodes[i].state + nodes[i].alpha
+          if (score < minAlpha) {
+            minAlpha = score
+            weakestIdx = i
+          }
+        }
+        
+        if (weakestIdx !== -1) {
+          nodes.splice(weakestIdx, 1)
+          changed = true
+        } else {
+          break
+        }
+      }
+
+      // Standard removal for naturally dying nodes
       for (let i = nodes.length - 1; i >= 0; i--) {
         if (nodes.length <= N_MIN) break
         if (nodes[i].deadSteps > DEATH_STEPS && nodes[i].alpha < 0.05) {
@@ -159,6 +425,7 @@
           changed = true
         }
       }
+      
       const alive = nodes.filter(n => n.state === 1)
       if (nodes.length < N_MAX && Math.random() < P_SPAWN) {
         const parent = alive.length > 0
@@ -171,6 +438,8 @@
           y:         Math.max(MARGIN, Math.min(canvas.height - MARGIN, parent.y + Math.sin(angle) * dist)),
           vx: 0,     vy: 0,
           state:     0,
+          targetState: 0,
+          stateDelay: 0,
           alpha:     0,
           ripple:    0,
           deadSteps: 0,
@@ -178,11 +447,14 @@
         changed = true
       }
       if (nodes.length < N_MIN) {
+        const s = Math.random() < 0.4 ? 1 : 0
         nodes.push({
           x: MARGIN + Math.random() * (canvas.width  - 2 * MARGIN),
           y: MARGIN + Math.random() * (canvas.height - 2 * MARGIN),
           vx: 0, vy: 0,
-          state: Math.random() < 0.4 ? 1 : 0,
+          state: s,
+          targetState: s,
+          stateDelay: 0,
           alpha: 0, ripple: 0, deadSteps: 0,
         })
         changed = true
@@ -198,8 +470,13 @@
           : (alive === 2 || alive === 3 ? 1 : 0)
       })
       nodes.forEach((n, i) => {
-        if (next[i] === 1 && n.state === 0) n.ripple = 1
-        n.state     = next[i]
+        if (next[i] !== n.state) {
+          n.targetState = next[i]
+          n.stateDelay  = Math.random() * STEP_MS
+        } else {
+          n.targetState = n.state
+          n.stateDelay  = 0
+        }
         n.deadSteps = n.state === 0 ? n.deadSteps + 1 : 0
       })
       checkLifecycle()
@@ -207,7 +484,10 @@
 
     function perturb() {
       nodes.forEach(n => {
-        if (Math.random() < 0.12) n.state = Math.random() < 0.38 ? 1 : 0
+        if (Math.random() < 0.12) {
+          n.targetState = Math.random() < 0.38 ? 1 : 0
+          n.stateDelay  = Math.random() * STEP_MS
+        }
       })
     }
 
@@ -216,10 +496,12 @@
       return `${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)}`
     }
 
-    let lastStep = 0, lastPerturb = 0
+    let lastStep = 0, lastPerturb = 0, lastFrame = 0
 
     function frame(now: number) {
       if (!canvas.width || !canvas.height) { requestAnimationFrame(frame); return }
+      const dt = now - lastFrame
+      lastFrame = now
 
       if (!reduced) applyForces()
       if (!reduced && now - lastStep > STEP_MS)       { step();    lastStep    = now }
@@ -229,6 +511,13 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       for (const n of nodes) {
+        if (n.stateDelay > 0) {
+          n.stateDelay -= dt
+          if (n.stateDelay <= 0) {
+            if (n.targetState === 1 && n.state === 0) n.ripple = 1
+            n.state = n.targetState
+          }
+        }
         n.alpha  = n.state  > n.alpha  ? Math.min(1, n.alpha  + FADE) : Math.max(0, n.alpha  - FADE)
         n.ripple = n.ripple > 0        ? Math.max(0, n.ripple - 0.04) : 0
       }
