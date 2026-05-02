@@ -1507,22 +1507,22 @@ function renderComparisonCard(freeData, quotientData, topdim) {
   card.className = 'result-card';
   card.style.animationDelay = '0.3s';
 
-  // Helper: delta label
-  function delta(a, b) {
-    const d = b - a;
+  // Helper: delta label — only shown on the quotient side
+  function delta(freeCount, quotientCount) {
+    const d = quotientCount - freeCount;
     if (d === 0) return '';
     const cls = d < 0 ? 'neg' : 'pos';
-    return `<span class="compare-delta ${cls}">${d > 0 ? '+' : ''}${d}</span>`;
+    return `<span class="compare-delta ${cls}"> (${d > 0 ? '+' : ''}${d})</span>`;
   }
 
-  // Simplex rows
+  // Simplex rows — free side shows plain counts, quotient side shows count + delta
   function simplexRows(simp, otherSimp, isFree) {
     const dims = [0, 1, 2, 3].filter(d => simp[d]);
     return dims.map(d => {
       const count = simp[d].length;
       const other = otherSimp[d]?.length ?? 0;
-      const diff  = isFree ? delta(count, other) : delta(other, count);
-      const cls   = isFree ? '' : (count < (otherSimp[d]?.length ?? count) ? 'collapsed' : '');
+      const diff  = isFree ? '' : delta(other, count);
+      const cls   = (!isFree && count < other) ? 'collapsed' : '';
       return `
         <div class="compare-row">
           <span class="cr-label">${d}-simplices</span>
