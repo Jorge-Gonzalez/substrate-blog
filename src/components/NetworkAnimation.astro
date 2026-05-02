@@ -3,42 +3,51 @@
   
   <div class="controls reveal" id="controls">
     <button class="controls-toggle" id="controlsToggle" aria-label="Toggle controls">
-      <span class="controls-icon">⚙</span>
-      <span class="controls-label">Parameters</span>
+      params <span class="toggle-arrow">></span>
     </button>
     
     <div class="controls-panel">
       <div class="control-group">
-        <label>
-          Nodes: <span id="valNodes">55</span>
+        <div class="control-row">
           <input type="range" id="rangeNodes" min="10" max="120" value="55" step="1" />
-        </label>
+          <span class="control-value" id="valNodes">55</span>
+        </div>
+        <span class="control-label">Nodes</span>
       </div>
+      
       <div class="control-group">
-        <label>
-          Repel: <span id="valRepel">3000</span>
+        <div class="control-row">
           <input type="range" id="rangeRepel" min="500" max="8000" value="3000" step="100" />
-        </label>
+          <span class="control-value" id="valRepel">3000</span>
+        </div>
+        <span class="control-label">Repel</span>
       </div>
+      
       <div class="control-group">
-        <label>
-          Stiffness: <span id="valSpring">0.012</span>
+        <div class="control-row">
           <input type="range" id="rangeSpring" min="0.001" max="0.040" value="0.012" step="0.001" />
-        </label>
+          <span class="control-value" id="valSpring">0.012</span>
+        </div>
+        <span class="control-label">Stiffness</span>
       </div>
+      
       <div class="control-group">
-        <label>
-          Speed: <span id="valSpeed">500</span>ms
+        <div class="control-row">
           <input type="range" id="rangeSpeed" min="100" max="2000" value="500" step="50" />
-        </label>
+          <span class="control-value"><span id="valSpeed">500</span>ms</span>
+        </div>
+        <span class="control-label">Speed</span>
       </div>
+      
       <div class="control-group">
-        <label>
-          Gravity: <span id="valGravity">0.001</span>
+        <div class="control-row">
           <input type="range" id="rangeGravity" min="0" max="0.005" value="0.001" step="0.0001" />
-        </label>
+          <span class="control-value" id="valGravity">0.001</span>
+        </div>
+        <span class="control-label">Gravity</span>
       </div>
-      <button class="controls-reset" id="controlsReset">Reset to Defaults</button>
+      
+      <button class="controls-reset" id="controlsReset">Reset</button>
     </div>
   </div>
 </div>
@@ -58,112 +67,141 @@
   }
   .controls {
     position: absolute;
-    bottom: 2.5rem;
-    left: 2rem;
+    top: 8.5rem;
+    right: 2rem;
     z-index: 10;
     pointer-events: auto;
+    text-align: right;
   }
   .controls-toggle {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 2rem;
-    padding: 0.4rem 1rem;
+    background: none;
+    border: none;
+    padding: 0;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     font-family: var(--font-mono);
     font-size: 0.6rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--text-muted);
-    transition: all var(--transition);
+    color: var(--text-dim);
+    transition: color var(--transition);
   }
   .controls-toggle:hover {
-    border-color: var(--accent);
     color: var(--accent);
   }
+  .controls.open .toggle-arrow {
+    display: inline-block;
+    transform: rotate(90deg);
+  }
+  
   .controls-panel {
     position: absolute;
-    bottom: calc(100% + 1rem);
-    left: 0;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    width: 220px;
+    top: 2rem;
+    right: 0;
+    width: 140px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    backdrop-filter: blur(10px);
+    transform: translateX(10px);
+    transition: all 0.4s cubic-bezier(0.2, 1, 0.2, 1);
   }
   .controls.open .controls-panel {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateX(0);
   }
+
   .control-group {
     margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
   }
-  .control-group label {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .control-group label span {
-    color: var(--accent);
-    float: right;
-  }
-  .control-group input {
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     width: 100%;
-    margin-top: 0.5rem;
-    cursor: pointer;
-    accent-color: var(--accent);
   }
-  .controls-reset {
-    width: 100%;
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.5rem;
-    margin-top: 0.5rem;
+  .control-label {
     font-family: var(--font-mono);
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--text-dim);
+    margin-top: 0.2rem;
+    opacity: 0.8;
+  }
+  .control-value {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--accent-dim);
+    min-width: 2.5rem;
+    text-align: left;
+  }
+
+  /* Minimalist Slider */
+  input[type="range"] {
+    -webkit-appearance: none;
+    flex-grow: 1;
+    background: transparent;
     cursor: pointer;
-    transition: all var(--transition);
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 1px;
+    background: var(--border-soft);
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    margin-top: -2.5px;
+    transition: background 0.2s, transform 0.2s;
+  }
+  input[type="range"]:hover::-webkit-slider-thumb {
+    background: var(--accent);
+    transform: scale(1.3);
+  }
+  input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 1px;
+    background: var(--border-soft);
+  }
+  input[type="range"]::-moz-range-thumb {
+    height: 6px;
+    width: 6px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent-dim);
+  }
+
+  .controls-reset {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity var(--transition), color var(--transition);
   }
   .controls-reset:hover {
-    border-color: var(--accent-dim);
+    opacity: 1;
     color: var(--accent);
-    background: var(--bg-hover);
   }
 
   @media (max-width: 768px) {
     .controls {
-      bottom: auto;
-      top: 5rem;
-      left: 1.25rem;
+      top: 6rem;
+      right: 1.5rem;
     }
     .controls-panel {
-      bottom: auto;
-      top: calc(100% + 0.5rem);
-    }
-    .controls-label {
-      display: none;
-    }
-    .controls-toggle {
-      padding: 0.4rem;
-      width: 2rem;
-      height: 2rem;
-      justify-content: center;
+      width: 130px;
     }
   }
 </style>
