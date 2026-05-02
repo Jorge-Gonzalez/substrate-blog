@@ -592,7 +592,11 @@
 
 <script>
 // ================================================================
-// PRG Framework — core computation (ported from Python)
+// LAYER 1 — CORE ALGEBRA
+// RelationalSystem: quotient category via generators + congruence.
+// Responsible for: inverse resolution, relation expansion,
+// free reduction (xx⁻¹ → id), and congruence rewriting.
+// No DOM access. No topology. Pure algebra.
 // ================================================================
 
 class RelationalSystem {
@@ -746,7 +750,22 @@ class RelationalSystem {
   _wordKey(word) { return JSON.stringify(word); }
 }
 
-// ---- Nerve construction ----
+// ================================================================
+// LAYER 2 — NERVE & TOPOLOGY
+// Builds simplicial complexes from relational presentations.
+//
+// buildNerve      — nerve of the QUOTIENT category.
+//                   Elements are congruence classes (relations applied).
+//                   This is the classical nerve used for homology output.
+//
+// buildFreeNerve  — nerve of the FREE category (pre-quotient).
+//                   Elements are raw words up to maxWordLen with only
+//                   free reduction (xx⁻¹ cancellation), no congruence.
+//                   Used to compare presentation vs quotient structure.
+//
+// faceMap, buildBoundaryMatrix — boundary operators on simplices.
+// No DOM access. No UI state.
+// ================================================================
 
 function buildNerve(system, maxWordLen) {
   const elements = new Map();
@@ -808,6 +827,65 @@ function buildNerve(system, maxWordLen) {
   return { simplices: {0:s0,1:s1,2:s2,3:s3}, elements: elems };
 }
 
+// Pre-quotient nerve: enumerate raw words, apply only free reduction
+// (cancel xx⁻¹ pairs), never apply congruence laws.
+// Returns the same shape as buildNerve so they can be compared directly.
+function buildFreeNerve(system, maxWordLen) {
+  const allGens = [
+    ...system.generators,
+    ...system.generators.map(g => system.inv[g])
+  ];
+
+  // Collect elements as freely-reduced words (no relation application)
+  const elements = new Map();
+  const idKey = JSON.stringify([]);
+  elements.set(idKey, []);
+
+  for (let len = 1; len <= maxWordLen; len++) {
+    const combos = cartesian(allGens, len);
+    for (const combo of combos) {
+      const reduced = system.reduce(combo); // free reduction only
+      const key = JSON.stringify(reduced);
+      if (!elements.has(key)) elements.set(key, reduced);
+    }
+  }
+
+  const elems = [...elements.values()].sort((a, b) => {
+    if (a.length !== b.length) return a.length - b.length;
+    return JSON.stringify(a) < JSON.stringify(b) ? -1 : 1;
+  });
+
+  const elemSet = new Set(elems.map(e => JSON.stringify(e)));
+
+  // Compose using free reduction only (no congruence)
+  const freeCompose = (w1, w2) => system.reduce([...w1, ...w2]);
+
+  const s0 = [[]];
+  const s1 = elems.map(g => [g]);
+  const s2 = [];
+  for (const g of elems) {
+    for (const h of elems) {
+      const gh = freeCompose(g, h);
+      if (elemSet.has(JSON.stringify(gh))) s2.push([g, h]);
+    }
+  }
+  const s3 = [];
+  for (const g of elems) {
+    for (const h of elems) {
+      const gh = freeCompose(g, h);
+      if (!elemSet.has(JSON.stringify(gh))) continue;
+      for (const k of elems) {
+        const hk = freeCompose(h, k);
+        if (!elemSet.has(JSON.stringify(hk))) continue;
+        const ghk = freeCompose(gh, k);
+        if (elemSet.has(JSON.stringify(ghk))) s3.push([g, h, k]);
+      }
+    }
+  }
+
+  return { simplices: { 0: s0, 1: s1, 2: s2, 3: s3 }, elements: elems };
+}
+
 function cartesian(arr, n) {
   if (n === 0) return [[]];
   const rest = cartesian(arr, n-1);
@@ -855,7 +933,11 @@ function buildBoundaryMatrix(simplices, dim, system) {
   return { data, rows: lower.length, cols: upper.length };
 }
 
-// ---- Smith normal form (integer) ----
+// ================================================================
+// LAYER 3 — LINEAR ALGEBRA
+// Integer Smith normal form, homology computation, chain complex
+// verification. Pure math — no DOM, no system-specific logic.
+// ================================================================
 
 function smithNF(matData, rows, cols) {
   if (rows === 0 || cols === 0) return [];
@@ -965,10 +1047,7 @@ function formatGroup(free, torsion) {
   return parts.join(' × ') || '0';
 }
 
-// ================================================================
-// Congruence trace for demonstration
-// ================================================================
-
+// Returns the rewrite trace for a single word — used by the rendering layer.
 function getCongruenceTrace(system, word) {
   const traceLog = [];
   system.applyRelations(word, traceLog);
@@ -976,7 +1055,9 @@ function getCongruenceTrace(system, word) {
 }
 
 // ================================================================
-// Presets
+// LAYER 4 — PRESETS & INPUT PARSING
+// Static preset definitions and user input → system construction.
+// parseInput() is the only function here that reads the DOM.
 // ================================================================
 
 const PRESETS = {
@@ -1072,7 +1153,9 @@ function parseInput() {
 }
 
 // ================================================================
-// Main computation
+// LAYER 5 — APP LOGIC
+// Orchestrates layers 1–3 in response to user actions.
+// Reads DOM only for status/button state. No HTML generation.
 // ================================================================
 
 function setStatus(s) {
@@ -1170,7 +1253,9 @@ function generateTraceExamples(system, generators) {
 }
 
 // ================================================================
-// Render
+// LAYER 6 — RENDERING
+// All DOM construction lives here. Takes plain data objects from
+// Layer 5 and turns them into HTML. No math, no system logic.
 // ================================================================
 
 function renderResults({ system, elements, simplices, homology, topdim,
@@ -1510,6 +1595,10 @@ function buildStartupTrace() {
 
 // ================================================================
 // Init
+// ================================================================
+
+// ================================================================
+// INIT
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
