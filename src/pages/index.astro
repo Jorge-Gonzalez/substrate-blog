@@ -438,18 +438,17 @@ const rest     = sorted.slice(1)
   )
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
 
-  // Hero graph animation
+  // Hero — Game of Life emergence animation
   ;(function () {
     const canvas = document.getElementById('heroCanvas')! as HTMLCanvasElement
     if (!canvas) return
-    const ctx = canvas.getContext('2d')!
+    const ctx    = canvas.getContext('2d')!
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    let bg: string, fg: string, accent: string
+    let bg: string, accent: string
     function readColors() {
       const s = getComputedStyle(document.documentElement)
       bg     = s.getPropertyValue('--bg').trim()
-      fg     = s.getPropertyValue('--text').trim()
       accent = s.getPropertyValue('--accent').trim()
     }
     readColors()
@@ -457,108 +456,92 @@ const rest     = sorted.slice(1)
       attributes: true, attributeFilter: ['data-theme', 'class']
     })
 
-    const N    = 22
-    const DIST = 160
-    const SPD  = 0.28
-    const nodes: { x: number; y: number; vx: number; vy: number }[] = []
+    const CELL      = 32
+    const RADIUS    = 5
+    const FADE      = 0.065
+    const STEP_MS   = 380
+    const PERTURB_MS = 9000
+
+    let cols = 0, rows = 0
+    let grid:  number[][]
+    let alpha: number[][]
+
+    function make() {
+      cols  = Math.ceil(canvas.width  / CELL) + 1
+      rows  = Math.ceil(canvas.height / CELL) + 1
+      grid  = Array.from({ length: rows }, () =>
+        Array.from({ length: cols }, () => Math.random() < 0.28 ? 1 : 0)
+      )
+      alpha = grid.map(row => [...row])
+    }
 
     function resize() {
       canvas.width  = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
-      if (nodes.length === 0) {
-        for (let i = 0; i < N; i++) {
-          nodes.push({
-            x:  Math.random() * canvas.width,
-            y:  Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * SPD * 2,
-            vy: (Math.random() - 0.5) * SPD * 2,
-          })
-        }
-      }
+      if (canvas.width > 0 && canvas.height > 0) make()
     }
     window.addEventListener('resize', resize)
     resize()
 
-    const paths: { a: number; b: number; born: number }[] = []
-    let lastPath = 0
-    const PATH_EVERY    = 2800
-    const PATH_DURATION = 1800
-
-    function rgb(hex: string) {
-      const h = hex.replace('#', '')
-      return [
-        parseInt(h.slice(0, 2), 16),
-        parseInt(h.slice(2, 4), 16),
-        parseInt(h.slice(4, 6), 16),
-      ].join(',')
+    function neighbors(r: number, c: number) {
+      let n = 0
+      for (let dr = -1; dr <= 1; dr++)
+        for (let dc = -1; dc <= 1; dc++) {
+          if (dr === 0 && dc === 0) continue
+          n += grid[(r + dr + rows) % rows][(c + dc + cols) % cols]
+        }
+      return n
     }
 
+    function step() {
+      const next = grid.map((row, r) =>
+        row.map((cell, c) => {
+          const n = neighbors(r, c)
+          return cell ? (n === 2 || n === 3 ? 1 : 0) : (n === 3 ? 1 : 0)
+        })
+      )
+      grid = next
+    }
+
+    function perturb() {
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+          if (Math.random() < 0.015)
+            grid[r][c] = Math.random() < 0.35 ? 1 : 0
+    }
+
+    function hexRgb(hex: string) {
+      const h = hex.replace('#', '')
+      return `${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)}`
+    }
+
+    let lastStep = 0, lastPerturb = 0
+
     function frame(now: number) {
-      const w = canvas.width
-      const h = canvas.height
+      if (!canvas.width || !canvas.height) { requestAnimationFrame(frame); return }
+
+      if (!reduced && now - lastStep > STEP_MS)    { step();    lastStep    = now }
+      if (!reduced && now - lastPerturb > PERTURB_MS) { perturb(); lastPerturb = now }
 
       ctx.fillStyle = bg
-      ctx.fillRect(0, 0, w, h)
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      if (!reduced) {
-        for (const n of nodes) {
-          n.x += n.vx; n.y += n.vy
-          if (n.x < 0)  { n.x  = 0; n.vx =  Math.abs(n.vx) }
-          if (n.x > w)  { n.x  = w; n.vx = -Math.abs(n.vx) }
-          if (n.y < 0)  { n.y  = 0; n.vy =  Math.abs(n.vy) }
-          if (n.y > h)  { n.y  = h; n.vy = -Math.abs(n.vy) }
-        }
-      }
+      const acRgb = hexRgb(accent)
 
-      const fgRgb = rgb(fg)
-      const acRgb = rgb(accent)
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          alpha[r][c] = grid[r][c] > alpha[r][c]
+            ? Math.min(1, alpha[r][c] + FADE)
+            : Math.max(0, alpha[r][c] - FADE)
 
-      for (let i = 0; i < N; i++) {
-        for (let j = i + 1; j < N; j++) {
-          const d = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y)
-          if (d < DIST) {
-            ctx.strokeStyle = `rgba(${fgRgb},${(1 - d / DIST) * 0.13})`
-            ctx.lineWidth   = 0.8
+          const a = alpha[r][c]
+          if (a > 0.01) {
+            ctx.fillStyle = `rgba(${acRgb},${a * 0.42})`
             ctx.beginPath()
-            ctx.moveTo(nodes[i].x, nodes[i].y)
-            ctx.lineTo(nodes[j].x, nodes[j].y)
-            ctx.stroke()
+            ctx.arc(c * CELL + CELL / 2, r * CELL + CELL / 2, RADIUS, 0, Math.PI * 2)
+            ctx.fill()
           }
         }
-      }
-
-      for (let i = paths.length - 1; i >= 0; i--) {
-        const p = paths[i]
-        const t = (now - p.born) / PATH_DURATION
-        if (t > 1) { paths.splice(i, 1); continue }
-        const a = t < 0.2 ? t / 0.2 : 1 - (t - 0.2) / 0.8
-        ctx.strokeStyle = `rgba(${acRgb},${a * 0.7})`
-        ctx.lineWidth   = 1.5
-        ctx.beginPath()
-        ctx.moveTo(nodes[p.a].x, nodes[p.a].y)
-        ctx.lineTo(nodes[p.b].x, nodes[p.b].y)
-        ctx.stroke()
-        ;[p.a, p.b].forEach(idx => {
-          ctx.fillStyle = `rgba(${acRgb},${a})`
-          ctx.beginPath()
-          ctx.arc(nodes[idx].x, nodes[idx].y, 3.5, 0, Math.PI * 2)
-          ctx.fill()
-        })
-      }
-
-      if (!reduced && now - lastPath > PATH_EVERY) {
-        const a = Math.floor(Math.random() * N)
-        let b   = Math.floor(Math.random() * N)
-        while (b === a) b = Math.floor(Math.random() * N)
-        paths.push({ a, b, born: now })
-        lastPath = now
-      }
-
-      for (const n of nodes) {
-        ctx.fillStyle = `rgba(${fgRgb},0.22)`
-        ctx.beginPath()
-        ctx.arc(n.x, n.y, 2.5, 0, Math.PI * 2)
-        ctx.fill()
       }
 
       requestAnimationFrame(frame)
