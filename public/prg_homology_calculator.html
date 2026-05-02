@@ -407,6 +407,71 @@
     animation: fadein 0.3s forwards;
   }
 
+  /* ---- Comparison card ---- */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .compare-col {
+    padding: 14px 16px;
+  }
+
+  .compare-col + .compare-col {
+    border-left: 1px solid var(--border);
+  }
+
+  .compare-col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .compare-col-title.free    { color: var(--yellow); }
+  .compare-col-title.quotient { color: var(--accent); }
+
+  .compare-row {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 2.1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .compare-row .cr-label { color: var(--dim); }
+  .compare-row .cr-val   { color: var(--text); }
+  .compare-row .cr-val.collapsed { color: var(--yellow); }
+  .compare-row .cr-val.gained    { color: var(--green); }
+  .compare-row .cr-val.same      { color: var(--dim); }
+
+  .compare-delta {
+    font-size: 10px;
+    color: var(--dim);
+    margin-left: 4px;
+  }
+  .compare-delta.neg { color: var(--yellow); }
+  .compare-delta.pos { color: var(--green); }
+
+  .compare-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 10px 0;
+  }
+
+  .compare-note {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    line-height: 1.8;
+  }
+
   /* scrollbar */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -748,6 +813,19 @@ class RelationalSystem {
   identity() { return []; }
 
   _wordKey(word) { return JSON.stringify(word); }
+}
+
+// Returns a minimal system-compatible object that composes using only
+// free reduction — no congruence laws applied. Used to run the standard
+// boundary machinery on the free nerve without modifying RelationalSystem.
+function makeFreeSystem(system) {
+  return {
+    generators: system.generators,
+    inv:        system.inv,
+    reduce:     system.reduce.bind(system),
+    compose:    (w1, w2) => system.reduce([...w1, ...w2]),
+    _wordKey:   system._wordKey.bind(system),
+  };
 }
 
 // ================================================================
@@ -1187,10 +1265,10 @@ function runComputation() {
       const system = new RelationalSystem(generators, inverses, relations);
       const expected = (PRESETS[currentPreset] || {}).expected || {};
 
-      // Build nerve
+      // Build quotient nerve
       const { simplices, elements } = buildNerve(system, depth);
 
-      // Build boundary maps
+      // Build boundary maps (quotient)
       const boundaryMaps = {};
       boundaryMaps[0] = { data: [], rows: 0, cols: 1 };
       for (let dim = 1; dim <= topdim + 1; dim++) {
@@ -1202,8 +1280,24 @@ function runComputation() {
       // Check d^2 = 0
       const d2ok = checkD2(boundaryMaps, topdim);
 
-      // Compute homology
+      // Compute homology (quotient)
       const homology = computeHomology(boundaryMaps, topdim);
+
+      // Build free nerve (pre-quotient) — only when laws exist
+      let freeData = null;
+      if (system.expandedRelations.length > 0) {
+        const freeSystem = makeFreeSystem(system);
+        const { simplices: fSimp, elements: fElems } = buildFreeNerve(system, depth);
+        const freeBoundaryMaps = {};
+        freeBoundaryMaps[0] = { data: [], rows: 0, cols: 1 };
+        for (let dim = 1; dim <= topdim + 1; dim++) {
+          if (fSimp[dim] && fSimp[dim-1]) {
+            freeBoundaryMaps[dim] = buildBoundaryMatrix(fSimp, dim, freeSystem);
+          }
+        }
+        const freeHomology = computeHomology(freeBoundaryMaps, topdim);
+        freeData = { simplices: fSimp, elements: fElems, homology: freeHomology };
+      }
 
       // Generate trace for demo
       const traceExamples = generateTraceExamples(system, generators);
@@ -1219,7 +1313,8 @@ function runComputation() {
 
       renderResults({
         system, elements, simplices, homology, topdim,
-        d2ok, allMatch, expected, traceExamples, generators
+        d2ok, allMatch, expected, traceExamples, generators,
+        freeData
       });
       setStatus(d2ok ? 'ok' : 'err');
 
@@ -1259,7 +1354,8 @@ function generateTraceExamples(system, generators) {
 // ================================================================
 
 function renderResults({ system, elements, simplices, homology, topdim,
-                         d2ok, allMatch, expected, traceExamples, generators }) {
+                         d2ok, allMatch, expected, traceExamples, generators,
+                         freeData }) {
   const body = document.getElementById('results-body');
   body.innerHTML = '';
 
@@ -1399,6 +1495,107 @@ function renderResults({ system, elements, simplices, homology, topdim,
     </div>
   `;
   body.appendChild(nerveCard);
+
+  // Comparison card — only when congruence laws are present
+  if (freeData) {
+    body.appendChild(renderComparisonCard(freeData, { simplices, elements, homology }, topdim));
+  }
+}
+
+function renderComparisonCard(freeData, quotientData, topdim) {
+  const card = document.createElement('div');
+  card.className = 'result-card';
+  card.style.animationDelay = '0.3s';
+
+  // Helper: delta label
+  function delta(a, b) {
+    const d = b - a;
+    if (d === 0) return '';
+    const cls = d < 0 ? 'neg' : 'pos';
+    return `<span class="compare-delta ${cls}">${d > 0 ? '+' : ''}${d}</span>`;
+  }
+
+  // Simplex rows
+  function simplexRows(simp, otherSimp, isFree) {
+    const dims = [0, 1, 2, 3].filter(d => simp[d]);
+    return dims.map(d => {
+      const count = simp[d].length;
+      const other = otherSimp[d]?.length ?? 0;
+      const diff  = isFree ? delta(count, other) : delta(other, count);
+      const cls   = isFree ? '' : (count < (otherSimp[d]?.length ?? count) ? 'collapsed' : '');
+      return `
+        <div class="compare-row">
+          <span class="cr-label">${d}-simplices</span>
+          <span class="cr-val ${cls}">${count}${diff}</span>
+        </div>`;
+    }).join('');
+  }
+
+  // Homology rows
+  function homologyRows(hom, otherHom, isFree) {
+    return Array.from({ length: topdim + 1 }, (_, n) => {
+      const { free, torsion } = hom[n] || { free: 0, torsion: [] };
+      const computed = formatGroup(free, torsion);
+      const otherComputed = formatGroup(
+        otherHom[n]?.free || 0,
+        otherHom[n]?.torsion || []
+      );
+      const changed = computed !== otherComputed;
+      const cls = changed ? (isFree ? 'collapsed' : 'gained') : 'same';
+      return `
+        <div class="compare-row">
+          <span class="cr-label">H_${n}</span>
+          <span class="cr-val ${cls}">${computed}</span>
+        </div>`;
+    }).join('');
+  }
+
+  // Build note about what changed
+  const homChanges = [];
+  for (let n = 0; n <= topdim; n++) {
+    const fG = formatGroup(freeData.homology[n]?.free || 0, freeData.homology[n]?.torsion || []);
+    const qG = formatGroup(quotientData.homology[n]?.free || 0, quotientData.homology[n]?.torsion || []);
+    if (fG !== qG) homChanges.push(`H_${n}: ${fG} → ${qG}`);
+  }
+  const elemCollapsed = freeData.elements.length - quotientData.elements.length;
+  const noteText = elemCollapsed > 0
+    ? `Congruence laws identified ${elemCollapsed} element class${elemCollapsed !== 1 ? 'es' : ''}.`
+    : 'No element classes were identified by the laws.';
+  const homNote = homChanges.length > 0
+    ? ` Homology changed at: ${homChanges.join(', ')}.`
+    : ' Homology is unchanged by the quotient.';
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-title">Presentation Comparison</div>
+      <div class="card-tag correct">free vs quotient</div>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-col">
+        <div class="compare-col-title free">Free Category</div>
+        <div class="compare-row">
+          <span class="cr-label">elements</span>
+          <span class="cr-val">${freeData.elements.length}</span>
+        </div>
+        ${simplexRows(freeData.simplices, quotientData.simplices, true)}
+        <hr class="compare-divider">
+        ${homologyRows(freeData.homology, quotientData.homology, true)}
+      </div>
+      <div class="compare-col">
+        <div class="compare-col-title quotient">Quotient Category</div>
+        <div class="compare-row">
+          <span class="cr-label">elements</span>
+          <span class="cr-val ${elemCollapsed > 0 ? 'collapsed' : ''}">${quotientData.elements.length}${delta(freeData.elements.length, quotientData.elements.length)}</span>
+        </div>
+        ${simplexRows(quotientData.simplices, freeData.simplices, false)}
+        <hr class="compare-divider">
+        ${homologyRows(quotientData.homology, freeData.homology, false)}
+      </div>
+    </div>
+    <div class="compare-note">${noteText}${homNote}</div>
+  `;
+
+  return card;
 }
 
 function renderError(msg) {
