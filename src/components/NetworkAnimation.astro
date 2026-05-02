@@ -245,7 +245,8 @@
     
     const MARGIN     = 100
     const K          = 5
-    const FADE       = 0.05
+    let fadeRate     = 0.05
+    let rippleRate   = 0.04
     const PERTURB_MS = 8000
     const REST       = 130
     const REST_ALV   = 80
@@ -253,6 +254,12 @@
     const MAX_V      = 2.2
     const DEATH_STEPS = 7
     const P_SPAWN    = 0.4
+
+    function updateRates() {
+      fadeRate = Math.min(0.2, 25 / STEP_MS)
+      rippleRate = Math.min(0.1, 20 / STEP_MS)
+    }
+    updateRates()
 
     function updateLimits() {
       N_MAX = Math.floor(N_TARGET * 1.25)
@@ -303,7 +310,18 @@
     })
     inputs.repel.addEventListener('input', () => { REPEL = parseFloat(inputs.repel.value); displays.repel.textContent = inputs.repel.value })
     inputs.spring.addEventListener('input', () => { SPRING = parseFloat(inputs.spring.value); displays.spring.textContent = inputs.spring.value })
-    inputs.speed.addEventListener('input', () => { STEP_MS = parseFloat(inputs.speed.value); displays.speed.textContent = inputs.speed.value })
+    inputs.speed.addEventListener('input', () => { 
+      const oldSpeed = STEP_MS
+      STEP_MS = parseFloat(inputs.speed.value)
+      displays.speed.textContent = inputs.speed.value
+      updateRates()
+      
+      // Rescale existing delays
+      const ratio = STEP_MS / oldSpeed
+      for (const n of nodes) {
+        n.stateDelay *= ratio
+      }
+    })
     inputs.gravity.addEventListener('input', () => { GRAVITY = parseFloat(inputs.gravity.value); displays.gravity.textContent = inputs.gravity.value })
 
     resetBtn?.addEventListener('click', () => {
@@ -313,6 +331,7 @@
       STEP_MS = DEFAULTS.speed
       GRAVITY = DEFAULTS.gravity
       updateLimits()
+      updateRates()
       updateUI()
     })
 
@@ -556,8 +575,8 @@
             n.state = n.targetState
           }
         }
-        n.alpha  = n.state  > n.alpha  ? Math.min(1, n.alpha  + FADE) : Math.max(0, n.alpha  - FADE)
-        n.ripple = n.ripple > 0        ? Math.max(0, n.ripple - 0.04) : 0
+        n.alpha  = n.state  > n.alpha  ? Math.min(1, n.alpha  + fadeRate) : Math.max(0, n.alpha  - fadeRate)
+        n.ripple = n.ripple > 0        ? Math.max(0, n.ripple - rippleRate) : 0
       }
 
       const acRgb = hexRgb(accent)
