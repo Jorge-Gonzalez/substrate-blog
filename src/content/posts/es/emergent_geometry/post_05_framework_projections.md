@@ -72,4 +72,8 @@ Esa incertidumbre es donde se encuentra el pensamiento actualmente.  No es un ma
 ---
 
 *El desarrollo matemático formal detrás de estas ideas está siendo desarrollado
-en un artículo complementario actualmente en progreso.*
+en un artículo complementario actualmente en progreso. Una versión anterior
+de ese artículo exageró la novedad del marco. Tras la crítica sustantiva de
+miembros de la comunidad Zulip de Teoría de Categorías, el artículo fue
+revisado para aclarar que la maquinaria es clásica y la contribución es
+organizacional y conceptual. La versión actual refleja eso.*

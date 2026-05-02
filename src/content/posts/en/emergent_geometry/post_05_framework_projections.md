@@ -142,4 +142,9 @@ a question worth pursuing, that is exactly what this series was for.
 ---
 
 *The formal mathematical development behind these ideas is being developed
-in a companion paper currently in progress.*
+in a companion paper currently in progress. An earlier version of that
+paper overstated the novelty of the framework. Following substantive
+critique from members of the Category Theory Zulip community, the paper
+was revised to clarify that the machinery is classical and the
+contribution is organizational and conceptual. The current version
+reflects that.*
