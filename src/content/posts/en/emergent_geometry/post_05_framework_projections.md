@@ -130,8 +130,8 @@ the walk is. The honest posture is to hold them at different levels
 of confidence.
 
 What they have in common is that none of them were part of the
-original question. The framework was built to fix a foundational
-problem in geometry. Whether it succeeds at that, and whether any
+original question. The framework was built to answer one question about geometric
+objects. Whether it answers that question well, and whether any
 of these connections lead somewhere real, are questions still being
 worked through.
 

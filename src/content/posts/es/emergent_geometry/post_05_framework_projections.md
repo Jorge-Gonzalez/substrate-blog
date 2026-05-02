@@ -65,7 +65,7 @@ Lo que desarrollaron las cuatro publicaciones anteriores fue un marco.  Lo que e
 
 Estas no son el mismo tipo de cosa.  Algunas se deducen directamente de los teoremas.  Algunas son preguntas abiertas que el marco plantea sin responder todavía.  Algunas son visibles en el horizonte sin saber cuánto dura el camino.  La postura honesta es mantenerlas a diferentes niveles de confianza.
 
-Lo que tienen en común es que ninguna de ellas formaba parte de la pregunta original.  El marco se construyó para solucionar un problema fundamental en geometría.  Si lo logra, y si alguna de estas conexiones lleva a algún lugar real, son preguntas que aún se están trabajando.
+Lo que tienen en común es que ninguna de ellas formaba parte de la pregunta original.  El marco se construyó para responder una pregunta sobre objetos geométricos.  Si la responde bien, y si alguna de estas conexiones lleva a algún lugar real, son preguntas que aún se están trabajando.
 
 Esa incertidumbre es donde se encuentra el pensamiento actualmente.  No es un mapa terminado — es una dirección.  Si algo de esto resuena o abre una pregunta que valga la pena seguir, para eso fue exactamente esta serie.
 
