@@ -1,0 +1,276 @@
+<canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+
+<style>
+  .hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>
+
+<script>
+  // Hero — Graph Game of Life with force-directed movement
+  ;(function () {
+    const canvas  = document.getElementById('heroCanvas')! as HTMLCanvasElement
+    if (!canvas) return
+    const ctx     = canvas.getContext('2d')!
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    let bg: string, fg: string, accent: string
+    function readColors() {
+      const s = getComputedStyle(document.documentElement)
+      bg     = s.getPropertyValue('--bg').trim()
+      fg     = s.getPropertyValue('--text').trim()
+      accent = s.getPropertyValue('--accent').trim()
+    }
+    readColors()
+    new MutationObserver(readColors).observe(document.documentElement, {
+      attributes: true, attributeFilter: ['data-theme', 'class']
+    })
+
+    const N_TARGET   = 55
+    const N_MAX      = 68
+    const N_MIN      = 20
+    const K          = 5
+    const FADE       = 0.05
+    const STEP_MS    = 500
+    const PERTURB_MS = 8000
+    const REPEL      = 3000
+    const REST       = 130
+    const REST_ALV   = 80
+    const SPRING     = 0.012
+    const DAMP       = 0.86
+    const MAX_V      = 2.2
+    const MARGIN     = 60
+    const DEATH_STEPS = 7
+    const P_SPAWN    = 0.4
+
+    type Node = {
+      x: number; y: number; vx: number; vy: number
+      state: number; alpha: number; ripple: number; deadSteps: number
+    }
+    let nodes: Node[] = []
+    let adj:   number[][] = []
+    let edges: [number, number][] = []
+
+    function rebuildConnections() {
+      const n = nodes.length
+      const adjSet = Array.from({ length: n }, () => new Set<number>())
+      for (let i = 0; i < n; i++) {
+        Array.from({ length: n }, (_, j) => j)
+          .filter(j => j !== i)
+          .sort((a, b) =>
+            Math.hypot(nodes[a].x - nodes[i].x, nodes[a].y - nodes[i].y) -
+            Math.hypot(nodes[b].x - nodes[i].x, nodes[b].y - nodes[i].y)
+          )
+          .slice(0, K)
+          .forEach(j => { adjSet[i].add(j); adjSet[j].add(i) })
+      }
+      adj   = adjSet.map(s => [...s])
+      edges = []
+      for (let i = 0; i < n; i++)
+        for (const j of adj[i])
+          if (j > i) edges.push([i, j])
+    }
+
+    function build() {
+      nodes = Array.from({ length: N_TARGET }, () => ({
+        x:         Math.random() * canvas.width,
+        y:         Math.random() * canvas.height,
+        vx: 0,     vy: 0,
+        state:     Math.random() < 0.32 ? 1 : 0,
+        alpha:     0,
+        ripple:    0,
+        deadSteps: 0,
+      }))
+      rebuildConnections()
+      for (const n of nodes) n.alpha = n.state
+    }
+
+    function resize() {
+      canvas.width  = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+      if (canvas.width > 0 && canvas.height > 0) build()
+    }
+    window.addEventListener('resize', resize)
+    resize()
+
+    function applyForces() {
+      const N = nodes.length
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const dx = nodes[i].x - nodes[j].x
+          const dy = nodes[i].y - nodes[j].y
+          const d2 = Math.max(dx * dx + dy * dy, 1)
+          const d  = Math.sqrt(d2)
+          const f  = REPEL / d2
+          const fx = (dx / d) * f;  const fy = (dy / d) * f
+          nodes[i].vx += fx;  nodes[i].vy += fy
+          nodes[j].vx -= fx;  nodes[j].vy -= fy
+        }
+      }
+      for (const [a, b] of edges) {
+        const dx   = nodes[b].x - nodes[a].x
+        const dy   = nodes[b].y - nodes[a].y
+        const d    = Math.hypot(dx, dy) || 0.1
+        const both = nodes[a].state === 1 && nodes[b].state === 1
+        const f    = SPRING * (d - (both ? REST_ALV : REST))
+        const fx   = (dx / d) * f;  const fy = (dy / d) * f
+        nodes[a].vx += fx;  nodes[a].vy += fy
+        nodes[b].vx -= fx;  nodes[b].vy -= fy
+      }
+      const centerX = canvas.width / 2
+      const centerY = canvas.height / 2
+      const GRAVITY = 0.001 // Subtle pull to keep the cluster centered
+
+      for (const n of nodes) {
+        // Subtle central gravity
+        n.vx += (centerX - n.x) * GRAVITY
+        n.vy += (centerY - n.y) * GRAVITY
+
+        // Damping and velocity clamping
+        n.vx *= DAMP;  n.vy *= DAMP
+        n.vx = Math.max(-MAX_V, Math.min(MAX_V, n.vx))
+        n.vy = Math.max(-MAX_V, Math.min(MAX_V, n.vy))
+
+        // Exponential boundary push
+        if (n.x < MARGIN) n.vx += Math.pow((MARGIN - n.x) / MARGIN, 2) * 1.5
+        if (n.x > canvas.width - MARGIN) n.vx -= Math.pow((n.x - (canvas.width - MARGIN)) / MARGIN, 2) * 1.5
+        if (n.y < MARGIN) n.vy += Math.pow((MARGIN - n.y) / MARGIN, 2) * 1.5
+        if (n.y > canvas.height - MARGIN) n.vy -= Math.pow((n.y - (canvas.height - MARGIN)) / MARGIN, 2) * 1.5
+
+        n.x += n.vx;  n.y += n.vy
+
+        // Hard boundary clamp
+        n.x = Math.max(2, Math.min(canvas.width - 2, n.x))
+        n.y = Math.max(2, Math.min(canvas.height - 2, n.y))
+      }
+    }
+
+    function checkLifecycle() {
+      let changed = false
+      for (let i = nodes.length - 1; i >= 0; i--) {
+        if (nodes.length <= N_MIN) break
+        if (nodes[i].deadSteps > DEATH_STEPS && nodes[i].alpha < 0.05) {
+          nodes.splice(i, 1)
+          changed = true
+        }
+      }
+      const alive = nodes.filter(n => n.state === 1)
+      if (nodes.length < N_MAX && Math.random() < P_SPAWN) {
+        const parent = alive.length > 0
+          ? alive[Math.floor(Math.random() * alive.length)]
+          : nodes[Math.floor(Math.random() * nodes.length)]
+        const angle = Math.random() * Math.PI * 2
+        const dist  = 80 + Math.random() * 100
+        nodes.push({
+          x:         Math.max(MARGIN, Math.min(canvas.width  - MARGIN, parent.x + Math.cos(angle) * dist)),
+          y:         Math.max(MARGIN, Math.min(canvas.height - MARGIN, parent.y + Math.sin(angle) * dist)),
+          vx: 0,     vy: 0,
+          state:     0,
+          alpha:     0,
+          ripple:    0,
+          deadSteps: 0,
+        })
+        changed = true
+      }
+      if (nodes.length < N_MIN) {
+        nodes.push({
+          x: MARGIN + Math.random() * (canvas.width  - 2 * MARGIN),
+          y: MARGIN + Math.random() * (canvas.height - 2 * MARGIN),
+          vx: 0, vy: 0,
+          state: Math.random() < 0.4 ? 1 : 0,
+          alpha: 0, ripple: 0, deadSteps: 0,
+        })
+        changed = true
+      }
+      if (changed) rebuildConnections()
+    }
+
+    function step() {
+      const next = nodes.map((node, i) => {
+        const alive = adj[i].filter(j => nodes[j].state === 1).length
+        return node.state === 1
+          ? (alive >= 1 && alive <= 3 ? 1 : 0)
+          : (alive === 2 || alive === 3 ? 1 : 0)
+      })
+      nodes.forEach((n, i) => {
+        if (next[i] === 1 && n.state === 0) n.ripple = 1
+        n.state     = next[i]
+        n.deadSteps = n.state === 0 ? n.deadSteps + 1 : 0
+      })
+      checkLifecycle()
+    }
+
+    function perturb() {
+      nodes.forEach(n => {
+        if (Math.random() < 0.12) n.state = Math.random() < 0.38 ? 1 : 0
+      })
+    }
+
+    function hexRgb(hex: string) {
+      const h = hex.replace('#', '')
+      return `${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)}`
+    }
+
+    let lastStep = 0, lastPerturb = 0
+
+    function frame(now: number) {
+      if (!canvas.width || !canvas.height) { requestAnimationFrame(frame); return }
+
+      if (!reduced) applyForces()
+      if (!reduced && now - lastStep > STEP_MS)       { step();    lastStep    = now }
+      if (!reduced && now - lastPerturb > PERTURB_MS) { perturb(); lastPerturb = now }
+
+      ctx.fillStyle = bg
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      for (const n of nodes) {
+        n.alpha  = n.state  > n.alpha  ? Math.min(1, n.alpha  + FADE) : Math.max(0, n.alpha  - FADE)
+        n.ripple = n.ripple > 0        ? Math.max(0, n.ripple - 0.04) : 0
+      }
+
+      const acRgb = hexRgb(accent)
+      const fgRgb = hexRgb(fg)
+
+      for (const [a, b] of edges) {
+        const avg = (nodes[a].alpha + nodes[b].alpha) / 2
+        ctx.strokeStyle = avg > 0.1 ? `rgba(${acRgb},${avg * 0.35})` : `rgba(${fgRgb},0.06)`
+        ctx.lineWidth   = avg > 0.1 ? 0.5 : 0.25
+        ctx.beginPath()
+        ctx.moveTo(nodes[a].x, nodes[a].y)
+        ctx.lineTo(nodes[b].x, nodes[b].y)
+        ctx.stroke()
+      }
+
+      for (const n of nodes) {
+        if (n.ripple > 0) {
+          ctx.strokeStyle = `rgba(${acRgb},${n.ripple * 0.45})`
+          ctx.lineWidth   = 1
+          ctx.beginPath()
+          ctx.arc(n.x, n.y, 3 + (1 - n.ripple) * 10, 0, Math.PI * 2)
+          ctx.stroke()
+        }
+        const a = n.alpha
+        if (a > 0.04) {
+          ctx.fillStyle = `rgba(${acRgb},${a * 0.85})`
+          ctx.beginPath()
+          ctx.arc(n.x, n.y, 1 + a * 2.5, 0, Math.PI * 2)
+          ctx.fill()
+        } else {
+          ctx.fillStyle = `rgba(${fgRgb},0.1)`
+          ctx.beginPath()
+          ctx.arc(n.x, n.y, 1, 0, Math.PI * 2)
+          ctx.fill()
+        }
+      }
+
+      requestAnimationFrame(frame)
+    }
+
+    requestAnimationFrame(frame)
+  })()
+</script>
