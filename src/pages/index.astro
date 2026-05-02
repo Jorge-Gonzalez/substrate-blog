@@ -18,30 +18,27 @@ const featured = sorted[0]
 const rest     = sorted.slice(1)
 ---
 
-<Base title="Jorge Gonzalez">
+<Base title="Substrate">
 
   <section class="hero" id="home">
+    <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
     <div class="hero-eyebrow">
-      <span class="label">Web Designer &amp; Programmer</span>
+      <span class="label">Substrate.lat</span>
     </div>
     <h1 class="hero-name">
-      Jorge
-      <span>Gonzalez</span>
+      Substrate
     </h1>
-    <p class="hero-title">Web Designer &amp; Programmer &mdash; Costa Rica</p>
+    <p class="hero-title">Notes on shared ground</p>
     <p class="hero-statement">
-      I think in systems. Design taught me to see structure. Code taught me
-      to question it. Now I build things at the intersection of both — and
-      write about what I find along the way. <a href="/about" class="hero-about-link">More about how I think →</a>
+      The same underlying structures appear across fields that share no
+      obvious reason for them. This site follows that observation — through
+      design, mathematics, and philosophy. Not conclusions. Notes.
+      <a href="/about" class="hero-about-link">About →</a>
     </p>
     <span class="hero-scroll">Scroll</span>
   </section>
 
   <section id="ideas">
-    <div class="section-header reveal">
-      <span class="section-number">02</span>
-      <h2>Ideas Worth Sharing</h2>
-    </div>
     <div class="ideas-grid">
 
       {featured && (
@@ -80,22 +77,13 @@ const rest     = sorted.slice(1)
   </section>
 
   <section id="connect">
-    <div class="section-header reveal">
-      <span class="section-number">03</span>
-      <h2>Let's Think Together</h2>
-    </div>
     <div class="connect-inner">
       <div class="connect-text reveal">
-        <p>I am interested in conversations that cross boundaries — between
-        design and code, between intuition and rigour, between the way things
-        are built and the way they could be built instead. If something I have
-        written made you think differently about a problem you are working on,
-        I would like to hear about it.</p>
-        <p>Currently building a text macro browser extension and thinking
-        through a compositional framework for web layouts. Always turning over
-        ideas at the foundations of mathematics, computation, and design.
-        Based in Costa Rica, available for projects that value thinking as
-        much as execution.</p>
+        <p>If something here connects to a question you are working through —
+        a structural parallel you have noticed, a foundation that seems
+        shakier than assumed, a pattern recurring where it shouldn't — that
+        is worth a conversation.</p>
+        <p>The thinking is in progress and genuinely open to correction.</p>
       </div>
       <div class="connect-links reveal">
         <a class="connect-link" href="mailto:jorge.gonzalez@live.com">
@@ -126,6 +114,24 @@ const rest     = sorted.slice(1)
 </Base>
 
 <style>
+  /* ── Hero canvas ── */
+  .hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-eyebrow,
+  .hero-name,
+  .hero-title,
+  .hero-statement,
+  .hero-scroll {
+    position: relative;
+    z-index: 1;
+  }
+
   /* ── Hero ── */
   .hero {
     min-height: 100vh;
@@ -431,4 +437,133 @@ const rest     = sorted.slice(1)
     { threshold: 0.1 }
   )
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+
+  // Hero graph animation
+  ;(function () {
+    const canvas = document.getElementById('heroCanvas')! as HTMLCanvasElement
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')!
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    let bg: string, fg: string, accent: string
+    function readColors() {
+      const s = getComputedStyle(document.documentElement)
+      bg     = s.getPropertyValue('--bg').trim()
+      fg     = s.getPropertyValue('--text').trim()
+      accent = s.getPropertyValue('--accent').trim()
+    }
+    readColors()
+    new MutationObserver(readColors).observe(document.documentElement, {
+      attributes: true, attributeFilter: ['data-theme', 'class']
+    })
+
+    const N    = 22
+    const DIST = 160
+    const SPD  = 0.28
+    const nodes: { x: number; y: number; vx: number; vy: number }[] = []
+
+    function resize() {
+      canvas.width  = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+      if (nodes.length === 0) {
+        for (let i = 0; i < N; i++) {
+          nodes.push({
+            x:  Math.random() * canvas.width,
+            y:  Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * SPD * 2,
+            vy: (Math.random() - 0.5) * SPD * 2,
+          })
+        }
+      }
+    }
+    window.addEventListener('resize', resize)
+    resize()
+
+    const paths: { a: number; b: number; born: number }[] = []
+    let lastPath = 0
+    const PATH_EVERY    = 2800
+    const PATH_DURATION = 1800
+
+    function rgb(hex: string) {
+      const h = hex.replace('#', '')
+      return [
+        parseInt(h.slice(0, 2), 16),
+        parseInt(h.slice(2, 4), 16),
+        parseInt(h.slice(4, 6), 16),
+      ].join(',')
+    }
+
+    function frame(now: number) {
+      const w = canvas.width
+      const h = canvas.height
+
+      ctx.fillStyle = bg
+      ctx.fillRect(0, 0, w, h)
+
+      if (!reduced) {
+        for (const n of nodes) {
+          n.x += n.vx; n.y += n.vy
+          if (n.x < 0)  { n.x  = 0; n.vx =  Math.abs(n.vx) }
+          if (n.x > w)  { n.x  = w; n.vx = -Math.abs(n.vx) }
+          if (n.y < 0)  { n.y  = 0; n.vy =  Math.abs(n.vy) }
+          if (n.y > h)  { n.y  = h; n.vy = -Math.abs(n.vy) }
+        }
+      }
+
+      const fgRgb = rgb(fg)
+      const acRgb = rgb(accent)
+
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const d = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y)
+          if (d < DIST) {
+            ctx.strokeStyle = `rgba(${fgRgb},${(1 - d / DIST) * 0.13})`
+            ctx.lineWidth   = 0.8
+            ctx.beginPath()
+            ctx.moveTo(nodes[i].x, nodes[i].y)
+            ctx.lineTo(nodes[j].x, nodes[j].y)
+            ctx.stroke()
+          }
+        }
+      }
+
+      for (let i = paths.length - 1; i >= 0; i--) {
+        const p = paths[i]
+        const t = (now - p.born) / PATH_DURATION
+        if (t > 1) { paths.splice(i, 1); continue }
+        const a = t < 0.2 ? t / 0.2 : 1 - (t - 0.2) / 0.8
+        ctx.strokeStyle = `rgba(${acRgb},${a * 0.7})`
+        ctx.lineWidth   = 1.5
+        ctx.beginPath()
+        ctx.moveTo(nodes[p.a].x, nodes[p.a].y)
+        ctx.lineTo(nodes[p.b].x, nodes[p.b].y)
+        ctx.stroke()
+        ;[p.a, p.b].forEach(idx => {
+          ctx.fillStyle = `rgba(${acRgb},${a})`
+          ctx.beginPath()
+          ctx.arc(nodes[idx].x, nodes[idx].y, 3.5, 0, Math.PI * 2)
+          ctx.fill()
+        })
+      }
+
+      if (!reduced && now - lastPath > PATH_EVERY) {
+        const a = Math.floor(Math.random() * N)
+        let b   = Math.floor(Math.random() * N)
+        while (b === a) b = Math.floor(Math.random() * N)
+        paths.push({ a, b, born: now })
+        lastPath = now
+      }
+
+      for (const n of nodes) {
+        ctx.fillStyle = `rgba(${fgRgb},0.22)`
+        ctx.beginPath()
+        ctx.arc(n.x, n.y, 2.5, 0, Math.PI * 2)
+        ctx.fill()
+      }
+
+      requestAnimationFrame(frame)
+    }
+
+    requestAnimationFrame(frame)
+  })()
 </script>

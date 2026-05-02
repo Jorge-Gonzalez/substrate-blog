@@ -9,8 +9,6 @@ export const ui = {
     // Theme toggle
     'theme.dark':  'Dark',
     'theme.light': 'Light',
-    // Footer
-    'footer.role': 'Web Designer, Programmer & Independent Thinker',
     // Language switcher
     'lang.switch': 'ES',
     // Post page
@@ -33,8 +31,6 @@ export const ui = {
     // Theme toggle
     'theme.dark':  'Oscuro',
     'theme.light': 'Claro',
-    // Footer
-    'footer.role': 'Diseñador Web, Programador y Pensador Independiente',
     // Language switcher
     'lang.switch': 'EN',
     // Post page
